@@ -1,0 +1,13 @@
+{
+  "version": "v1",
+  "packages": {
+    "auto-string": {
+      "signature": "318b487d3321bd73914b93a8a5f2af7f",
+      "file": true
+    },
+    "auto-strings": {
+      "signature": "7643bdb8bc128c1a7a1f97255d57f644",
+      "file": true
+    }
+  }
+}
