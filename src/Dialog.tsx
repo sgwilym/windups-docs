@@ -16,7 +16,10 @@ const Dialog: React.FC = ({ children }) => {
   const shownChildren = React.Children.toArray(children)
     .slice(0, numberOfChildrenToShow)
     .map((child, i) => (
-      <DialogChildContext.Provider value={{ isActive: i === activeChildIndex }}>
+      <DialogChildContext.Provider
+        key={i}
+        value={{ isActive: i === activeChildIndex }}
+      >
         {child}
       </DialogChildContext.Provider>
     ));
