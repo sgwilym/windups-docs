@@ -1788,6 +1788,11 @@
   resolved "https://registry.npmjs.org/@rehooks/component-size/-/component-size-1.0.3.tgz#823eabeb42084893d46d43e3a9d1d0e34252b3cb"
   integrity sha512-pnYld+8SSF2vXwdLOqBGUyOrv/SjzwLjIUcs/4c1JJgR0q4E9eBtBfuZMD6zUD51fvSehSsbnlQMzotSmPTXPg==
 
+"@rooks/use-key@^3.4.3":
+  version "3.4.3"
+  resolved "https://registry.npmjs.org/@rooks/use-key/-/use-key-3.4.3.tgz#3c91ada62e5f0df2eba437fe4dd6ab2aef4762d5"
+  integrity sha512-19BL1Ae+GJ3nd3agEc6DEdiYq/m9UXULyrPGoAAohkf3snfR5gDJUUwM1Y91fT5xhcPpcRX3MK/80nU61zqAuw==
+
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
   resolved "https://registry.npmjs.org/@svgr/babel-plugin-add-jsx-attribute/-/babel-plugin-add-jsx-attribute-4.2.0.tgz#dadcb6218503532d6884b210e7f3c502caaa44b1"
@@ -2580,7 +2585,7 @@ atob@^2.1.1:
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
 "auto-strings@file:.yalc/auto-strings":
-  version "1.0.0-5ee96cfe"
+  version "1.0.0-e6bc44be"
   dependencies:
     break-styled-lines "^1.1.1"
 
@@ -4211,6 +4216,11 @@ domutils@^1.5.1, domutils@^1.7.0:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+dot-beat-time@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.npmjs.org/dot-beat-time/-/dot-beat-time-1.2.1.tgz#0ed611b50b1e78043a5137a0951fc48a531a4454"
+  integrity sha512-/SZynid/jSoG+7SeCeImFLgOUGA00m8hU//IeUR+kmWQXR/3cgP0YyA0V5efHu2yU1Eza2KTVLYomXjc61XybA==
 
 dot-prop@^4.1.1:
   version "4.2.0"
@@ -10833,6 +10843,13 @@ url@^0.11.0:
   dependencies:
     punycode "1.3.2"
     querystring "0.2.0"
+
+use-internet-time@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/use-internet-time/-/use-internet-time-1.0.1.tgz#f8caa3b47d04f761056bd4aa655b072bdb88a235"
+  integrity sha512-UYqU3d9o9M6AlQwYlTl6pgUBSHRmxJlwRBNOFCkqjoq17H8iRJ2665WCPU5SBEhmt7d8Lfh7isrJ5ZM3oEUYUQ==
+  dependencies:
+    dot-beat-time "^1.2.1"
 
 use@^3.1.0:
   version "3.1.1"

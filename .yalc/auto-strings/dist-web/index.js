@@ -242,6 +242,14 @@ function useAutoStringTimeout(cassette, setCassette, options) {
             setCassette(finishedCassette);
         }
     }, [cassette, setCassette]);
+    useEffect(() => {
+        if (options.skipped) {
+            skip();
+            return () => {
+                shouldFireOnFinishRef.current = true;
+            };
+        }
+    });
     const rewindCassette = useCallback(() => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
@@ -441,10 +449,11 @@ function useChildrenEffect(fn, children) {
     const stringified = JSON.stringify(children, circular());
     return useEffect(fn, [stringified]);
 }
-const AutoString = ({ children, onFinished }) => {
+const AutoString = ({ children, onFinished, skipped }) => {
     const [cassette, setCassette] = useState(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));
     const { skip, rewind, isFinished } = useAutoStringTimeout(cassette, setCassette, {
-        onFinished
+        onFinished,
+        skipped
     });
     useChildrenEffect(() => {
         setCassette(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));

@@ -44,6 +44,14 @@ export default function useAutoStringTimeout(cassette, setCassette, options) {
             setCassette(finishedCassette);
         }
     }, [cassette, setCassette]);
+    useEffect(() => {
+        if (options.skipped) {
+            skip();
+            return () => {
+                shouldFireOnFinishRef.current = true;
+            };
+        }
+    });
     const rewindCassette = useCallback(() => {
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);

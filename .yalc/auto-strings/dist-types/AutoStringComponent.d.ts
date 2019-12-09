@@ -14,6 +14,7 @@ export declare type AutoStringMetadata = {
 export declare type AutoStringCassette = Cassette<string, AutoStringMetadata>;
 declare type AutoStringProps = {
     onFinished?: () => void;
+    skipped?: boolean;
 };
 declare const AutoString: React.FC<AutoStringProps>;
 export default AutoString;

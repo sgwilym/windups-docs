@@ -3,6 +3,7 @@ export declare type AutoStringOptions = {
     onCharacter?: (char: string, i: number) => void;
     onFinished?: () => void;
     pace?: (char: string) => number;
+    skipped?: boolean;
 };
 export default function useAutoString(text: string, options?: AutoStringOptions): [React.ReactNode, {
     skip: () => void;

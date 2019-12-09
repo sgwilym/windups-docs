@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^5.5.0",
     "@rehooks/component-size": "^1.0.3",
+    "@rooks/use-key": "^3.4.3",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.12",
     "@types/react": "16.9.5",
@@ -15,7 +16,8 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-scripts": "^3.3.0",
-    "typescript": "3.6.4"
+    "typescript": "3.6.4",
+    "use-internet-time": "^1.0.1"
   },
   "scripts": {
     "start": "craco start",
