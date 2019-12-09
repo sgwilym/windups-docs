@@ -1,3 +1,7 @@
-export { default as useTalkingText } from "./useTalkingText";
-export { default as useTalkingTexts, mapTextArgs } from "./useTalkingTexts";
-export { default as renderTextArg } from "./renderText";
+export { default as useAutoString } from "./useAutoString";
+export { default as AutoString } from "./AutoStringComponent";
+export { default as OnChar } from "./OnChar";
+export { default as Pace } from "./Pace";
+export { default as Pause } from "./Pause";
+export { default as CharWrapper } from "./CharWrapper";
+export { default as Linebreaker } from "./Linebreaker";

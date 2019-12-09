@@ -1,7 +1,7 @@
 {
   "name": "auto-strings",
-  "description": "Talking text, like in videogames, as a React hook.",
-  "version": "1.0.0-7643bdb8",
+  "description": "Everything you need to build elements that type themselves out in React.",
+  "version": "1.0.0-6d48d837",
   "license": "MIT",
   "files": [
     "dist-*/",
@@ -15,7 +15,9 @@
     "hooks",
     "videogames"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "break-styled-lines": "^1.1.1"
+  },
   "peerDependencies": {
     "react": "^16.8.0"
   },

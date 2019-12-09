@@ -1,26 +1,39 @@
-export function cassetteFromString(str) {
-    return ["", str];
+export function isPlayedCassette(cassette) {
+    return cassette.length === 2;
 }
-export function newCassette(arg) {
-    return [[], arg];
+export function memberIsCassette(member) {
+    // If it's not an array it can't be a cassette
+    if (!Array.isArray(member)) {
+        return false;
+    }
+    // If it has less or more than three members it's not a cassette
+    if (member.length !== 3) {
+        return false;
+    }
+    // If its first or second members are not arrays it's not a cassette
+    if (!Array.isArray(member[0]) || !Array.isArray(member[1])) {
+        return false;
+    }
+    // Past here we just have to hope ElementType isn't a Cassette.
+    return true;
 }
-export function isStringCassette(cassette) {
-    const [first] = cassette;
-    return typeof first === "string";
+export function cassetteFromString(str, metadata) {
+    return [[], str.split(""), metadata];
+}
+export function newCassette(arg, metadata) {
+    return [[], arg, metadata];
 }
 export function isUnplayed(cassette) {
-    if (isStringCassette(cassette)) {
-        return cassette[0].length === 0;
-    }
     const [played, remaining] = cassette;
     if (played.length > 0) {
         return false;
     }
-    return remaining.reduce((unplayed, cassette) => {
-        if (unplayed) {
-            return isUnplayed(cassette);
-        }
-        return false;
+    return remaining.reduce((unplayed, member) => {
+        if (memberIsCassette(member))
+            if (memberIsCassette(cassette) && unplayed) {
+                return isUnplayed(member);
+            }
+        return unplayed;
     }, true);
 }
 export function isFinished([_played, remaining]) {
@@ -37,109 +50,95 @@ export function rewind(cassette) {
     if (isUnplayed(cassette)) {
         return cassette;
     }
-    if (isStringCassette(cassette)) {
-        const [played, remaining] = cassette;
-        return ["", played + remaining];
-    }
-    const [played, remaining] = cassette;
-    return [[], [...played.map(cassetteFromString), ...remaining.map(rewind)]];
+    const [played, remaining, metadata] = cassette;
+    const mapRewind = (member) => {
+        if (memberIsCassette(member)) {
+            return rewind(member);
+        }
+        return member;
+    };
+    return [
+        [],
+        [...played.map(mapRewind), ...remaining.map(mapRewind)],
+        metadata
+    ];
 }
 export function cassetteAsString(cassette) {
-    if (!isStringCassette(cassette)) {
-        const [played, remaining] = cassette;
-        return [played.join(""), remaining.map(cassetteAsString).join("")].join("");
-    }
-    return cassette.join("");
-}
-export function lastPlayedChar([played, remaining]) {
-    if (typeof remaining !== "string" &&
-        remaining.length > 0 &&
-        !isUnplayed(remaining[0])) {
-        return lastPlayedChar(remaining[0]);
-    }
-    if (typeof played !== "string") {
-        if (played.length > 0) {
-            const lastPlayed = played[played.length - 1];
-            return lastPlayed.substr(-1, 1);
+    const [played, remaining] = cassette;
+    const stringify = (member) => {
+        if (memberIsCassette(member)) {
+            return cassetteAsString(member);
         }
-        return undefined;
-    }
-    if (played.length === 0) {
-        return undefined;
-    }
-    return played.substr(-1, 1);
+        return member;
+    };
+    return [
+        played.map(stringify).join(""),
+        remaining.map(stringify).join("")
+    ].join("");
 }
-export function playedStrings([played, remaining]) {
-    if (typeof played === "string") {
-        return [played];
+export function lastPlayedElement([played, remaining]) {
+    const playedFromRemaining = remaining.reduce((playedEl, member) => {
+        if (memberIsCassette(member)) {
+            if (!isUnplayed(member)) {
+                return lastPlayedElement(member);
+            }
+        }
+        return playedEl;
+    }, undefined);
+    if (playedFromRemaining) {
+        return playedFromRemaining;
     }
-    const [firstRemaining] = remaining;
-    if (firstRemaining &&
-        typeof firstRemaining !== "string" &&
-        !isUnplayed(firstRemaining)) {
-        return [...played, ...playedStrings(firstRemaining)];
+    const last = played[played.length - 1];
+    if (memberIsCassette(last)) {
+        return lastPlayedElement(last);
     }
-    return played;
+    return last;
 }
-export function nextChar([_played, remaining]) {
+export function playedElements([played, remaining]) {
+    const playedTransformed = played.map(member => {
+        if (memberIsCassette(member)) {
+            const [_played, _remaining, metadata] = member;
+            return [playedElements(member), metadata];
+        }
+        return member;
+    });
+    const [firstRemaning] = remaining;
+    if (memberIsCassette(firstRemaning) && !isUnplayed(firstRemaning)) {
+        const [_playedRemaining, _remaining, metadata] = firstRemaning;
+        return [
+            ...playedTransformed,
+            [playedElements(firstRemaning), metadata]
+        ];
+    }
+    return playedTransformed;
+}
+export function nextElement([_played, remaining]) {
     const [nextVal] = remaining;
-    if (nextVal === undefined) {
-        return nextVal;
+    if (memberIsCassette(nextVal)) {
+        return nextElement(nextVal);
     }
-    if (typeof nextVal === "string") {
-        return nextVal;
-    }
-    return nextChar(nextVal);
+    return nextVal;
 }
 export function next(cassette) {
     // start
-    // [[], [["", "hi"], ["", "no"]]]
+    // [[], [[[], ["h", "i"]], [[], ["n", "o"]]]]
     // next
-    // [[], [["h", "i"], ["", "no"]]]
+    // [[], [[["h"], ["i"]], ["", ["n", "o"]]]]
     // next
-    // [["hi"], [["n", "o"]]]
+    // [["h", "i"], [["n", "o"]]]
     // next
-    // [["hi", "no"], []]
+    // [["h", "i"] ["n", "o"]], []]
     if (isFinished(cassette)) {
         return cassette;
     }
-    if (isStringCassette(cassette)) {
-        const [played, remaining] = cassette;
-        return [played + nextChar(cassette), remaining.substring(1)];
-    }
-    const [playedCassettes, remainingCassettes] = cassette;
-    const [firstRemainingCassette, ...restRemainingCassettes] = remainingCassettes;
-    const nextFirstCassette = next(firstRemainingCassette);
-    if (isFinished(nextFirstCassette)) {
-        return [
-            [...playedCassettes, cassetteAsString(nextFirstCassette)],
-            restRemainingCassettes
-        ];
-    }
-    return [playedCassettes, [nextFirstCassette, ...restRemainingCassettes]];
-}
-export function didJustFinishSomething([played, remaining]) {
-    if (typeof played !== "string") {
-        const lastPlayed = played[played.length - 1];
-        const [firstRemaining] = remaining;
-        if (lastPlayed && firstRemaining && typeof firstRemaining !== "string") {
-            return isUnplayed(firstRemaining);
+    const [played, remaining, metadata] = cassette;
+    const [firstRemaining, ...restRemaining] = remaining;
+    if (memberIsCassette(firstRemaining)) {
+        const nextFirstRemaining = next(firstRemaining);
+        if (isFinished(nextFirstRemaining)) {
+            return [[...played, nextFirstRemaining], restRemaining, metadata];
         }
+        return [played, [nextFirstRemaining, ...restRemaining], metadata];
     }
-    return remaining.length === 0;
-}
-export function justFinishedString(cassette) {
-    if (didJustFinishSomething(cassette)) {
-        if (isStringCassette(cassette) && isFinished(cassette)) {
-            return cassetteAsString(cassette);
-        }
-        const [played] = cassette;
-        if (typeof played !== "string") {
-            const lastPlayed = played[played.length - 1];
-            if (lastPlayed) {
-                return lastPlayed;
-            }
-        }
-    }
-    return undefined;
+    return [[...played, firstRemaining], restRemaining, metadata];
 }

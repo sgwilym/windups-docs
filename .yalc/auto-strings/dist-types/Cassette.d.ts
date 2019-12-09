@@ -1,20 +1,16 @@
-interface CassetteArray extends Array<Cassette> {
-}
-export declare type StringCassette = [string, string];
-export declare type CassetteCassette = [string[], CassetteArray];
-export declare type Cassette = StringCassette | CassetteCassette;
-export declare function cassetteFromString(str: string): StringCassette;
-export declare function newCassette(arg: CassetteArray): Cassette;
-export declare function isStringCassette(cassette: Cassette): cassette is StringCassette;
-export declare function isUnplayed(cassette: Cassette): boolean;
-export declare function isFinished([_played, remaining]: Cassette): boolean;
-export declare function fastForward(cassette: Cassette): Cassette;
-export declare function rewind(cassette: Cassette): Cassette;
-export declare function cassetteAsString(cassette: Cassette): string;
-export declare function lastPlayedChar([played, remaining]: Cassette): string | undefined;
-export declare function playedStrings([played, remaining]: Cassette): string[];
-export declare function nextChar([_played, remaining]: Cassette): string | undefined;
-export declare function next(cassette: Cassette): Cassette;
-export declare function didJustFinishSomething([played, remaining]: Cassette): boolean;
-export declare function justFinishedString(cassette: Cassette): string | undefined;
-export {};
+export declare type CassetteMember<ElementType, MetadataType> = ElementType | Cassette<ElementType, MetadataType>;
+export declare type Cassette<ElementType, MetadataType> = [Array<CassetteMember<ElementType, MetadataType>>, Array<CassetteMember<ElementType, MetadataType>>, MetadataType];
+export declare function isPlayedCassette<ElementType, MetadataType>(cassette: PlayedCassette<ElementType, MetadataType> | Cassette<ElementType, MetadataType>): cassette is PlayedCassette<ElementType, MetadataType>;
+export declare function memberIsCassette<ElementType, MetadataType>(member: CassetteMember<ElementType, MetadataType>): member is Cassette<ElementType, MetadataType>;
+export declare function cassetteFromString<MetadataType>(str: string, metadata: MetadataType): Cassette<string, MetadataType>;
+export declare function newCassette<ElementType, MetadataType>(arg: Array<CassetteMember<ElementType, MetadataType>>, metadata: MetadataType): Cassette<ElementType, MetadataType>;
+export declare function isUnplayed<ElementType, MetadataType>(cassette: Cassette<ElementType, MetadataType>): boolean;
+export declare function isFinished<ElementType, MetadataType>([_played, remaining]: Cassette<ElementType, MetadataType>): boolean;
+export declare function fastForward<ElementType, MetadataType>(cassette: Cassette<ElementType, MetadataType>): Cassette<ElementType, MetadataType>;
+export declare function rewind<ElementType, MetadataType>(cassette: Cassette<ElementType, MetadataType>): Cassette<ElementType, MetadataType>;
+export declare function cassetteAsString<MetadataType>(cassette: Cassette<string, MetadataType>): string;
+export declare function lastPlayedElement<ElementType, MetadataType>([played, remaining]: Cassette<ElementType, MetadataType>): ElementType | undefined;
+export declare type PlayedCassette<ElementType, MetadataType> = [Array<ElementType>, MetadataType];
+export declare function playedElements<ElementType, MetadataType>([played, remaining]: Cassette<ElementType, MetadataType>): Array<ElementType | PlayedCassette<ElementType, MetadataType>>;
+export declare function nextElement<ElementType, MetadataType>([_played, remaining]: Cassette<ElementType, MetadataType>): ElementType | undefined;
+export declare function next<ElementType, MetadataType>(cassette: Cassette<ElementType, MetadataType>): Cassette<ElementType, MetadataType>;

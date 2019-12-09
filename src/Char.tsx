@@ -1,7 +1,5 @@
+import React from "react";
 import { css, cx } from "linaria";
-import React, { createContext, useContext } from "react";
-
-export const AnimatedCharContext = createContext(false);
 
 export const CHAR_FONT_STYLE = "32px sans-serif";
 
@@ -30,17 +28,11 @@ const animatingStyle = css`
 `;
 
 export const StandardChar: React.FC = ({ children }) => {
-  const isAnimating = useContext(AnimatedCharContext);
-
   if (children === "\n") {
     return <>{children}</>;
   }
 
-  return (
-    <span className={cx(charStyle, isAnimating && animatingStyle)}>
-      {children}
-    </span>
-  );
+  return <span className={cx(charStyle, animatingStyle)}>{children}</span>;
 };
 
 export const AngryChar: React.FC = ({ children }) => {
