@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useCallback, useState } from 'react';
+import React, { useRef, useEffect, useCallback, useState, useContext } from 'react';
 import breakLines from 'break-styled-lines';
 
 function isPlayedCassette(cassette) {
@@ -65,6 +65,19 @@ function rewind(cassette) {
         [...played.map(mapRewind), ...remaining.map(mapRewind)],
         metadata
     ];
+}
+function cassetteAsString(cassette) {
+    const [played, remaining] = cassette;
+    const stringify = (member) => {
+        if (memberIsCassette(member)) {
+            return cassetteAsString(member);
+        }
+        return member;
+    };
+    return [
+        played.map(stringify).join(""),
+        remaining.map(stringify).join("")
+    ].join("");
 }
 function lastPlayedElement([played, remaining]) {
     const playedFromRemaining = remaining.reduce((playedEl, member) => {
@@ -169,16 +182,34 @@ function paceFromCassette(cassette) {
     return metadata.pace;
 }
 
+const OnChar = ({ children }) => {
+    return React.createElement(React.Fragment, null, children);
+};
+function isOnCharElement(element) {
+    return element.type === OnChar;
+}
+function onCharFromCassette(cassette) {
+    if (isFinished(cassette)) {
+        return undefined;
+    }
+    const [_played, remaining, metadata] = cassette;
+    const [firstRemaining] = remaining;
+    if (firstRemaining && memberIsCassette(firstRemaining)) {
+        return onCharFromCassette(firstRemaining);
+    }
+    return metadata.onChar;
+}
+
 function useAutoStringTimeout(cassette, setCassette, options) {
     const timeoutRef = useRef(null);
-    const onCharacterRef = useRef(options.onChar);
+    const onCharacterRef = useRef(onCharFromCassette(cassette));
     const onFinishedRef = useRef(options.onFinished);
-    const paceRef = useRef(options.pace || defaultGetPace);
+    const paceRef = useRef(paceFromCassette(cassette) || defaultGetPace);
     const shouldFireOnFinishRef = useRef(true);
     const cassetteIsFinished = isFinished(cassette);
-    onCharacterRef.current = options.onChar;
+    onCharacterRef.current = onCharFromCassette(cassette);
     onFinishedRef.current = options.onFinished;
-    paceRef.current = options.pace || defaultGetPace;
+    paceRef.current = paceFromCassette(cassette) || defaultGetPace;
     useEffect(() => {
         if (cassetteIsFinished && onFinishedRef.current) {
             onFinishedRef.current();
@@ -218,7 +249,11 @@ function useAutoStringTimeout(cassette, setCassette, options) {
         shouldFireOnFinishRef.current = true;
         setCassette(rewind(cassette));
     }, [cassette, setCassette]);
-    return { skip, rewind: rewindCassette, isFinished: cassetteIsFinished };
+    return {
+        skip,
+        rewind: rewindCassette,
+        isFinished: cassetteIsFinished
+    };
 }
 
 function renderCassette(cassette) {
@@ -249,31 +284,15 @@ function useAutoString(text, options = {}) {
         element: React.Fragment
     }));
     useEffect(() => {
-        setCassette(cassetteFromString(text, {
-            ...options,
-            element: React.Fragment
-        }));
+        if (cassetteAsString(cassette) !== text) {
+            setCassette(cassetteFromString(text, {
+                ...options,
+                element: React.Fragment
+            }));
+        }
     }, [text]);
     const { skip, rewind, isFinished } = useAutoStringTimeout(cassette, setCassette, options);
     return [renderCassette(cassette), { skip, rewind, isFinished }];
-}
-
-const OnChar = ({ children }) => {
-    return React.createElement(React.Fragment, null, children);
-};
-function isOnCharElement(element) {
-    return element.type === OnChar;
-}
-function onCharFromCassette(cassette) {
-    if (isFinished(cassette)) {
-        return undefined;
-    }
-    const [_played, remaining, metadata] = cassette;
-    const [firstRemaining] = remaining;
-    if (firstRemaining && memberIsCassette(firstRemaining)) {
-        return onCharFromCassette(firstRemaining);
-    }
-    return metadata.onChar;
 }
 
 const Pause = ({}) => {
@@ -292,6 +311,18 @@ const AutoStringContext = React.createContext({
     },
     isFinished: false
 });
+function useSkip() {
+    const { skip } = useContext(AutoStringContext);
+    return skip;
+}
+function useRewind() {
+    const { rewind } = useContext(AutoStringContext);
+    return rewind;
+}
+function useIsFinished() {
+    const { isFinished } = useContext(AutoStringContext);
+    return isFinished;
+}
 function reduceCassetteArgs(prevArgs, children) {
     if (typeof children === "string") {
         return [...prevArgs, ...children.split("")];
@@ -393,13 +424,31 @@ function reduceCassetteArgs(prevArgs, children) {
         })
     ];
 }
+function circular() {
+    const seen = new WeakSet();
+    return (key, value) => {
+        if (key.startsWith("_"))
+            return; // Don't compare React's internal props.
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value))
+                return;
+            seen.add(value);
+        }
+        return value;
+    };
+}
+function useChildrenEffect(fn, children) {
+    const stringified = JSON.stringify(children, circular());
+    return useEffect(fn, [stringified]);
+}
 const AutoString = ({ children, onFinished }) => {
     const [cassette, setCassette] = useState(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));
     const { skip, rewind, isFinished } = useAutoStringTimeout(cassette, setCassette, {
-        onFinished,
-        pace: paceFromCassette(cassette),
-        onChar: onCharFromCassette(cassette)
+        onFinished
     });
+    useChildrenEffect(() => {
+        setCassette(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));
+    }, children);
     return (React.createElement(AutoStringContext.Provider, { value: {
             skip,
             rewind,
@@ -474,15 +523,14 @@ const Linebreaker = ({ children, fontStyle, width }) => {
     // non-character elements must not add width to the line.
     // must be used OUTSIDE of autostring component
     const childrenArray = React.Children.toArray(children);
-    console.log({ width });
     const strings = childrenArray.reduce(getStringsOfReactChildren, []);
     const transformedStrings = breakLines(strings, width, fontStyle);
     const [transformedChildren] = childrenArray.reduce(reinsertStringsIntoChildren, [
         [],
         transformedStrings
     ]);
-    return React.createElement("div", { style: { whiteSpace: "pre-line" } }, transformedChildren);
+    return React.createElement("div", { style: { whiteSpace: "pre-wrap" } }, transformedChildren);
 };
 
-export { AutoString, CharWrapper, Linebreaker, OnChar, Pace, Pause, useAutoString };
+export { AutoString, CharWrapper, Linebreaker, OnChar, Pace, Pause, useAutoString, useIsFinished, useRewind, useSkip };
 //# sourceMappingURL=index.js.map

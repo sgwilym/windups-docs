@@ -40,13 +40,12 @@ const Linebreaker = ({ children, fontStyle, width }) => {
     // non-character elements must not add width to the line.
     // must be used OUTSIDE of autostring component
     const childrenArray = React.Children.toArray(children);
-    console.log({ width });
     const strings = childrenArray.reduce(getStringsOfReactChildren, []);
     const transformedStrings = breakLines(strings, width, fontStyle);
     const [transformedChildren] = childrenArray.reduce(reinsertStringsIntoChildren, [
         [],
         transformedStrings
     ]);
-    return React.createElement("div", { style: { whiteSpace: "pre-line" } }, transformedChildren);
+    return React.createElement("div", { style: { whiteSpace: "pre-wrap" } }, transformedChildren);
 };
 export default Linebreaker;

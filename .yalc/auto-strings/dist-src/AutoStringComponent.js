@@ -1,7 +1,7 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { newCassette, cassetteFromString, memberIsCassette } from "./Cassette";
-import { isPaceElement, isMsProp, paceFromCassette } from "./Pace";
-import { isOnCharElement, onCharFromCassette } from "./OnChar";
+import { isPaceElement, isMsProp } from "./Pace";
+import { isOnCharElement } from "./OnChar";
 import { isPauseElement } from "./Pause";
 import useAutoStringTimeout from "./useAutoStringTimeout";
 import renderCassette from "./renderCassette";
@@ -127,13 +127,31 @@ function reduceCassetteArgs(prevArgs, children) {
         })
     ];
 }
+function circular() {
+    const seen = new WeakSet();
+    return (key, value) => {
+        if (key.startsWith("_"))
+            return; // Don't compare React's internal props.
+        if (typeof value === "object" && value !== null) {
+            if (seen.has(value))
+                return;
+            seen.add(value);
+        }
+        return value;
+    };
+}
+function useChildrenEffect(fn, children) {
+    const stringified = JSON.stringify(children, circular());
+    return useEffect(fn, [stringified]);
+}
 const AutoString = ({ children, onFinished }) => {
     const [cassette, setCassette] = useState(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));
     const { skip, rewind, isFinished } = useAutoStringTimeout(cassette, setCassette, {
-        onFinished,
-        pace: paceFromCassette(cassette),
-        onChar: onCharFromCassette(cassette)
+        onFinished
     });
+    useChildrenEffect(() => {
+        setCassette(newCassette(React.Children.toArray(children).reduce(reduceCassetteArgs, []), { element: undefined }));
+    }, children);
     return (React.createElement(AutoStringContext.Provider, { value: {
             skip,
             rewind,

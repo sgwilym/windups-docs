@@ -1,5 +1,5 @@
 export { default as useAutoString } from "./useAutoString";
-export { default as AutoString } from "./AutoStringComponent";
+export { default as AutoString, useIsFinished, useRewind, useSkip } from "./AutoStringComponent";
 export { default as OnChar } from "./OnChar";
 export { default as Pace } from "./Pace";
 export { default as Pause } from "./Pause";

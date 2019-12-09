@@ -1,16 +1,17 @@
 import { useRef, useEffect, useCallback } from "react";
-import { defaultGetPace } from "./Pace";
+import { defaultGetPace, paceFromCassette } from "./Pace";
 import { isFinished, lastPlayedElement, nextElement, next, fastForward, rewind } from "./Cassette";
+import { onCharFromCassette } from "./OnChar";
 export default function useAutoStringTimeout(cassette, setCassette, options) {
     const timeoutRef = useRef(null);
-    const onCharacterRef = useRef(options.onChar);
+    const onCharacterRef = useRef(onCharFromCassette(cassette));
     const onFinishedRef = useRef(options.onFinished);
-    const paceRef = useRef(options.pace || defaultGetPace);
+    const paceRef = useRef(paceFromCassette(cassette) || defaultGetPace);
     const shouldFireOnFinishRef = useRef(true);
     const cassetteIsFinished = isFinished(cassette);
-    onCharacterRef.current = options.onChar;
+    onCharacterRef.current = onCharFromCassette(cassette);
     onFinishedRef.current = options.onFinished;
-    paceRef.current = options.pace || defaultGetPace;
+    paceRef.current = paceFromCassette(cassette) || defaultGetPace;
     useEffect(() => {
         if (cassetteIsFinished && onFinishedRef.current) {
             onFinishedRef.current();
@@ -50,5 +51,9 @@ export default function useAutoStringTimeout(cassette, setCassette, options) {
         shouldFireOnFinishRef.current = true;
         setCassette(rewind(cassette));
     }, [cassette, setCassette]);
-    return { skip, rewind: rewindCassette, isFinished: cassetteIsFinished };
+    return {
+        skip,
+        rewind: rewindCassette,
+        isFinished: cassetteIsFinished
+    };
 }
