@@ -3,14 +3,14 @@ import Section from "../Section";
 import Dialog from "../Dialog";
 import DialogElement from "../DialogElement";
 import { Pace, Pause } from "auto-strings";
+import Snob from "../performers/Snob";
+import Fangirl from "../performers/Fangirl";
 
 const WhatIsIt: React.FC = () => {
   return (
     <Section title={"What's an auto-string?"}>
       <Dialog>
-        <DialogElement>
-          {"It's like text that builds itself! Wanna see?"}
-        </DialogElement>
+        <Fangirl>{"It's like text that builds itself! Wanna see?"}</Fangirl>
         <DialogElement autoProceed>
           <Pace getPace={char => (char === "." ? 200 : 70)}>
             {
@@ -18,13 +18,13 @@ const WhatIsIt: React.FC = () => {
             }
           </Pace>
         </DialogElement>
-        <DialogElement>{"Oh, so it's a typewriter effect."}</DialogElement>
-        <DialogElement>
+        <Snob>{"Oh, so it's a typewriter effect."}</Snob>
+        <Fangirl>
           {"..."}
           <Pause ms={500} />
           {"what's a typewriter?"}
-        </DialogElement>
-        <DialogElement>{"Never mind."}</DialogElement>
+        </Fangirl>
+        <Snob>{"Never mind."}</Snob>
       </Dialog>
     </Section>
   );

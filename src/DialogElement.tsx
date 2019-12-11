@@ -37,7 +37,7 @@ const NextButton: React.FC = () => {
   ) : null;
 };
 
-type DialogElementProps = {
+export type DialogElementProps = {
   autoProceed?: boolean;
 };
 

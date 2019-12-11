@@ -41,7 +41,6 @@ const Section: React.FC<SectionProps> = ({ title, children }) => {
           </button>
         )}
       </div>
-
       {pressedPlay && <div className={dialogRoot}>{children}</div>}
     </SectionContext.Provider>
   );

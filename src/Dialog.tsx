@@ -22,7 +22,9 @@ export const DialogChildContext = React.createContext({
 function useKeepInViewer(dependency: any) {
   const measurementRef = useRef<HTMLDivElement>();
 
-  const [inViewRef, isInView] = useInView();
+  const [inViewRef, isInView] = useInView({
+    rootMargin: "-100px 0px"
+  });
 
   const setRef = useCallback(
     node => {
@@ -37,10 +39,12 @@ function useKeepInViewer(dependency: any) {
       return;
     }
 
-    window.scrollTo({
-      top: measurementRef.current.offsetTop + window.pageYOffset - 200,
-      behavior: "smooth"
-    });
+    if (!isInView) {
+      window.scrollTo({
+        top: measurementRef.current.offsetTop - (window.innerHeight / 3) * 2,
+        behavior: "smooth"
+      });
+    }
   }, [dependency]);
 
   return <div ref={setRef} />;
