@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Uses from "./content/Uses";
 import WhatIsIt from "./content/WhatIsIt";
 import { css } from "linaria";
@@ -23,7 +23,17 @@ const titleStyle = css`
   padding: 1em 0;
 `;
 
+export const SectionFocusContext = React.createContext<{
+  activeSectionID: string | null;
+  setActiveSectionID: Function;
+}>({
+  activeSectionID: null,
+  setActiveSectionID: () => {}
+});
+
 const App: React.FC = () => {
+  const [activeSectionID, setActiveSectionID] = useState<string | null>(null);
+
   return (
     <div className={rootStyle}>
       <AutoString>
@@ -31,10 +41,17 @@ const App: React.FC = () => {
           <Pace ms={100}>{"auto-strings"}</Pace>
         </div>
       </AutoString>
-      <div className={contentStyle}>
-        <WhatIsIt />
-        <Uses />
-      </div>
+      <SectionFocusContext.Provider
+        value={{
+          activeSectionID,
+          setActiveSectionID
+        }}
+      >
+        <div className={contentStyle}>
+          <WhatIsIt />
+          <Uses />
+        </div>
+      </SectionFocusContext.Provider>
     </div>
   );
 };

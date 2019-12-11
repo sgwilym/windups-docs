@@ -1,6 +1,14 @@
-import React, { useState, useCallback, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useCallback,
+  useRef,
+  useEffect,
+  useContext
+} from "react";
 import { useInView } from "react-intersection-observer";
 import useSize from "@rehooks/component-size";
+import { SectionFocusContext } from "./App";
+import { SectionContext } from "./Section";
 
 export const DialogContext = React.createContext({
   proceed: () => {},
@@ -43,7 +51,12 @@ const Dialog: React.FC = ({ children }) => {
   const activeChildIndex = numberOfChildrenToShow - 1;
   const rootRef = useRef(null);
   const { height } = useSize(rootRef);
-  const keepy = useKeepInViewer(height);
+  const { activeSectionID, setActiveSectionID } = useContext(
+    SectionFocusContext
+  );
+  const { id } = useContext(SectionContext);
+  const isDialogActive = activeSectionID === id;
+  const keepy = useKeepInViewer(isDialogActive ? height : false);
 
   const shownChildren = React.Children.toArray(children)
     .slice(0, numberOfChildrenToShow)
@@ -60,6 +73,7 @@ const Dialog: React.FC = ({ children }) => {
     <DialogContext.Provider
       value={{
         proceed: () => {
+          setActiveSectionID(id);
           setNumberOfChildrenToShow(prev => prev + 1);
         },
         isFinished: numberOfChildrenToShow >= React.Children.count(children)

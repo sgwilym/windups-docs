@@ -3,17 +3,23 @@ import TextPanel from "./TextPanel";
 import { DialogContext, DialogChildContext } from "./Dialog";
 import useKey from "@rooks/use-key";
 import { useIsFinished, useSkip, Effect } from "auto-strings";
+import { SectionFocusContext } from "./App";
+import { SectionContext } from "./Section";
 
 const NextListener: React.FC = () => {
   const isFinished = useIsFinished();
   const skip = useSkip();
   const { proceed, isFinished: dialogIsFinished } = useContext(DialogContext);
   const { isActive } = useContext(DialogChildContext);
+  const { activeSectionID } = useContext(SectionFocusContext);
+  const { id } = useContext(SectionContext);
+  const isTotallyActive = isActive && activeSectionID === id;
+
   useKey([13, 39], () => {
-    if (isActive && !isFinished) {
+    if (isTotallyActive && !isFinished) {
       skip();
     } else {
-      if (isActive && !dialogIsFinished) {
+      if (isTotallyActive && !dialogIsFinished) {
         proceed();
       }
     }
