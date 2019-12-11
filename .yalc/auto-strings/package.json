@@ -1,7 +1,7 @@
 {
   "name": "auto-strings",
   "description": "Everything you need to build elements that type themselves out in React.",
-  "version": "1.0.0-e6bc44be",
+  "version": "1.0.0-08135f32",
   "license": "MIT",
   "files": [
     "dist-*/",

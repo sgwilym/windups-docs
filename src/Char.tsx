@@ -3,7 +3,7 @@ import { css, cx } from "linaria";
 
 export const CharContext = React.createContext({ animated: false });
 
-export const CHAR_FONT_STYLE = "32px sans-serif";
+export const CHAR_FONT_STYLE = "18pt sans-serif";
 
 const charStyle = css`
   display: inline-block;

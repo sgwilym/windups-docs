@@ -46,6 +46,6 @@ const Linebreaker = ({ children, fontStyle, width }) => {
         [],
         transformedStrings
     ]);
-    return React.createElement("div", { style: { whiteSpace: "pre-wrap" } }, transformedChildren);
+    return React.createElement("div", { style: { whiteSpace: "pre" } }, transformedChildren);
 };
 export default Linebreaker;

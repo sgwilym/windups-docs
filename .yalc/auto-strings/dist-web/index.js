@@ -538,8 +538,15 @@ const Linebreaker = ({ children, fontStyle, width }) => {
         [],
         transformedStrings
     ]);
-    return React.createElement("div", { style: { whiteSpace: "pre-wrap" } }, transformedChildren);
+    return React.createElement("div", { style: { whiteSpace: "pre" } }, transformedChildren);
 };
 
-export { AutoString, CharWrapper, Linebreaker, OnChar, Pace, Pause, useAutoString, useIsFinished, useRewind, useSkip };
+const Effect = ({ fn }) => {
+    useEffect(() => {
+        fn();
+    }, []);
+    return React.createElement(React.Fragment, null);
+};
+
+export { AutoString, CharWrapper, Effect, Linebreaker, OnChar, Pace, Pause, useAutoString, useIsFinished, useRewind, useSkip };
 //# sourceMappingURL=index.js.map

@@ -14,8 +14,6 @@ const TextPanel: React.FC = ({ children }) => {
   const { width: panelWidth } = useSize(panelRef);
   const [isFinished, setIsFinished] = useState(false);
 
-  // TODO: Key listener for skipping
-
   return (
     <CharContext.Provider value={{ animated: !isFinished }}>
       <div ref={panelRef} className={rootStyle}>

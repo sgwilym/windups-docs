@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import TextPanel from "./TextPanel";
 import { DialogContext, DialogChildContext } from "./Dialog";
 import useKey from "@rooks/use-key";
-import { useIsFinished, useSkip } from "auto-strings";
+import { useIsFinished, useSkip, Effect } from "auto-strings";
 
 const NextListener: React.FC = () => {
   const isFinished = useIsFinished();
@@ -27,16 +27,25 @@ const NextButton: React.FC = () => {
   const { isActive } = useContext(DialogChildContext);
 
   return !dialogIsFinished && isActive ? (
-    <button onClick={proceed}>{"Next"}</button>
+    <button onClick={proceed}>{"►"}</button>
   ) : null;
 };
 
-const DialogElement: React.FC = ({ children }) => {
+type DialogElementProps = {
+  autoProceed?: boolean;
+};
+
+const DialogElement: React.FC<DialogElementProps> = ({
+  children,
+  autoProceed
+}) => {
+  const { proceed } = useContext(DialogContext);
+
   return (
     <TextPanel>
       <NextListener />
       {children}
-      <NextButton />
+      {autoProceed ? <Effect fn={proceed} /> : <NextButton />}
     </TextPanel>
   );
 };
