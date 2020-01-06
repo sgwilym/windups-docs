@@ -5,6 +5,7 @@ import DialogElement from "../DialogElement";
 import Snob from "../performers/Snob";
 import Fangirl from "../performers/Fangirl";
 import Bat from "../performers/Bat";
+import Subheading from "../Subheading";
 
 const Uses: React.FC = () => {
   return (
@@ -63,7 +64,7 @@ const Uses: React.FC = () => {
           }
         </Bat>
         <DialogElement autoProceed>
-          {"Example 1: Order Confirmation"}
+          <Subheading>{"Example 1: Order Confirmation"}</Subheading>
         </DialogElement>
         <Bat>
           {
@@ -78,9 +79,13 @@ const Uses: React.FC = () => {
         <DialogElement autoProceed>
           {"(order confirmation with autostrings)"}
         </DialogElement>
-        <Bat>{"Look how much more impactful that is!"}</Bat>
+        <Bat>{"Look how much more impactful that is with an auto-string!"}</Bat>
         <Fangirl>{"Wow!"}</Fangirl>
-        <Snob>{"I suppose it's a slight improvement..."}</Snob>
+        <Snob>
+          {"I suppose it's a "}
+          <em>{"slight "}</em>
+          {"improvement..."}
+        </Snob>
       </Dialog>
     </Section>
   );

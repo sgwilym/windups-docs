@@ -31,7 +31,7 @@ function useKeepInViewer(dependency: any) {
       measurementRef.current = node;
       inViewRef(node);
     },
-    [isInView]
+    [inViewRef]
   );
 
   useEffect(() => {

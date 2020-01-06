@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import DialogElement, { DialogElementProps } from "./DialogElement";
-import { css } from "linaria";
+import { css, cx } from "linaria";
+import { DialogChildContext } from "./Dialog";
+import { SectionContext } from "./Section";
 
 const rootStyle = css`
   display: flex;
@@ -17,6 +19,10 @@ const iconStyle = css`
   margin-right: 0.3em;
 `;
 
+const inactiveStyle = css`
+  opacity: 0.75;
+`;
+
 interface PerformerProps extends DialogElementProps {
   avatar: string;
 }
@@ -26,8 +32,16 @@ const Performer: React.FC<PerformerProps> = ({
   avatar,
   autoProceed
 }) => {
+  const { isActive: sectionIsActive } = useContext(SectionContext);
+  const { isActive } = useContext(DialogChildContext);
+
   return (
-    <div className={rootStyle}>
+    <div
+      className={cx(
+        rootStyle,
+        (!isActive || !sectionIsActive) && inactiveStyle
+      )}
+    >
       <div className={iconStyle}>{avatar}</div>
       <div className={textStyle}>
         <DialogElement autoProceed={autoProceed}>{children}</DialogElement>

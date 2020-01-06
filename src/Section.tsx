@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { css, cx } from "linaria";
+import { css } from "linaria";
 import { SectionFocusContext } from "./App";
 
 const headingStyle = css`
@@ -11,11 +11,12 @@ const headingStyle = css`
 `;
 
 const dialogRoot = css`
-  margin: 1em 0;
+  margin: 1em 0 5em 0;
 `;
 
 export const SectionContext = React.createContext({
-  id: ""
+  id: "",
+  isActive: false
 });
 
 type SectionProps = {
@@ -24,10 +25,14 @@ type SectionProps = {
 
 const Section: React.FC<SectionProps> = ({ title, children }) => {
   const [pressedPlay, setPressedPlay] = useState(false);
-  const { setActiveSectionID } = useContext(SectionFocusContext);
+  const { setActiveSectionID, activeSectionID } = useContext(
+    SectionFocusContext
+  );
 
   return (
-    <SectionContext.Provider value={{ id: title }}>
+    <SectionContext.Provider
+      value={{ id: title, isActive: activeSectionID === title }}
+    >
       <div className={headingStyle}>
         <h2>{title}</h2>
         {!pressedPlay && (
