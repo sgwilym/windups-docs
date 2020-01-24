@@ -6,13 +6,24 @@ import { Pace, Pause } from "auto-strings";
 import Snob from "../performers/Snob";
 import Fangirl from "../performers/Fangirl";
 
+function examplePace(char: string) {
+  switch (char) {
+    case ".":
+      return 150;
+    case " ":
+      return 0;
+    default:
+      return 60;
+  }
+}
+
 const WhatIsIt: React.FC = () => {
   return (
     <Section title={"What's an auto-string?"}>
       <Dialog>
-        <Fangirl>{"It's like text that builds itself! Wanna see?"}</Fangirl>
+        <Fangirl>{"It's like text that writes itself! Wanna see?"}</Fangirl>
         <DialogElement autoProceed>
-          <Pace getPace={char => (char === "." ? 200 : 70)}>
+          <Pace getPace={examplePace}>
             {
               "THIS IS AN AUTO-STRING. PREVIOUSLY THOUGHT IMPOSSIBLE BY COMPUTER SCIENTISTS, NOW THE TECHNOLOGY OF TOMORROW IS HERE... TODA-"
             }
