@@ -2584,10 +2584,9 @@ atob@^2.1.1:
   resolved "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-"auto-strings@file:.yalc/auto-strings":
-  version "1.0.0-08135f32"
-  dependencies:
-    break-styled-lines "^1.1.1"
+"auto-strings@link:../auto-strings/pkg":
+  version "0.0.0"
+  uid ""
 
 autoprefixer@^9.6.1:
   version "9.6.5"
