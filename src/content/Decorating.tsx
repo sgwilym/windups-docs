@@ -38,7 +38,7 @@ const Decorating = () => {
         <FanGirl>{"Notice anything?"}</FanGirl>
         <Snob>{"Aside from a slight headache...?"}</Snob>
         <Snob>
-          {"... wrapping each character in its own tag seems pretty verbose."}
+          {"... wrapping each character in its own tag seems pretty annoying."}
         </Snob>
         <FanGirl>
           {

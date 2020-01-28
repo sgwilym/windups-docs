@@ -5,6 +5,7 @@ import { css } from "linaria";
 import { AutoString, Pace } from "auto-strings";
 import Overview from "./content/Overview";
 import Decorating from "./content/Decorating";
+import HelloAutoStrings from "./content/HelloAutoStrings";
 
 const rootStyle = css`
   padding: 0;
@@ -52,7 +53,7 @@ const App: React.FC = () => {
         <div className={contentStyle}>
           <WhatIsIt />
           <Uses />
-          <Overview />
+          <HelloAutoStrings />
           <Decorating />
         </div>
       </SectionFocusContext.Provider>

@@ -19,7 +19,7 @@ const Uses: React.FC = () => {
         </Snob>
         <Fangirl>{"But..."}</Fangirl>
         <Snob>{"Goodbye!"}</Snob>
-        <Bat>{"Hold on mate."}</Bat>
+        <Bat>{"Hold it right there."}</Bat>
         <Snob>{"E-excuse me, you are…?"}</Snob>
         <Bat autoProceed>
           {
@@ -34,7 +34,7 @@ const Uses: React.FC = () => {
         </Bat>
         <Bat>
           {
-            "You think it's just for chats between little cartoons, huh? You've got it all wrong, guv. Auto-strings can do so much more."
+            "You think it's just for chats between little cartoons, right? You've got it all wrong. Auto-strings can do so much more."
           }
         </Bat>
         <Fangirl>{"Yeah! That's right!"}</Fangirl>
@@ -53,7 +53,7 @@ const Uses: React.FC = () => {
         </Snob>
         <Bat>
           {
-            "Let's be real. You can't make ends meet through attacking wandering townspeople. Not in this economy."
+            "Let's be real. You can't make ends meet attacking wandering townspeople. Not in this economy."
           }
         </Bat>
         <Fangirl>{"So you taught yourself JavaScript?"}</Fangirl>
@@ -72,7 +72,7 @@ const Uses: React.FC = () => {
         </Bat>
         <Snob>{"(I wonder if his clients know he's a bat?)"}</Snob>
         <DialogElement autoProceed>{"(order confirmation)"}</DialogElement>
-        <Snob>{"I'm suprised at how... all right this looks."}</Snob>
+        <Snob>{"I'm pleasantly surprised. This is decent."}</Snob>
         <Bat>{"Wrong! It lacks impact! Kweeee!"}</Bat>
         <DialogElement autoProceed>
           {"(order confirmation with autostrings)"}
@@ -92,7 +92,7 @@ const Uses: React.FC = () => {
         <DialogElement autoProceed>
           <Subheading>{"Example: Chat Room"}</Subheading>
         </DialogElement>
-        <Bat>{"Here's a conversation I had with my mates last week."}</Bat>
+        <Bat>{"Here's a conversation I had with my associates last week."}</Bat>
         <DialogElement>{"(chat room example)"}</DialogElement>
         <Fangirl>{"Your friends seem nice."}</Fangirl>
         <Snob>
@@ -161,11 +161,10 @@ const Uses: React.FC = () => {
         </Fangirl>
         <Bat>
           {
-            "Exactly. It requires finesse, but auto-strings can be used to engage users with texts that they might be intimidated by."
+            "Quite. It requires finesse, but auto-strings can be used to engage users with texts that they might be intimidated by."
           }
         </Bat>
-        <Snob>{"A kind of TL;DR protection, so to speak."}</Snob>
-        <Bat>{"Exactly."}</Bat>
+        <Snob>{"A kind of TL;DR insurance, so to speak."}</Snob>
         <Fangirl>
           {
             "So you can use auto-strings for impact, warmth, attention and engagement. How cool is that?!"
@@ -176,7 +175,7 @@ const Uses: React.FC = () => {
         <Bat>{"Kweee!"}</Bat>
         <Snob>{"Wait!"}</Snob>
         <Fangirl>{"What's wrong?"}</Fangirl>
-        <Snob>{"I wanted to ask him what his rates were..."}</Snob>
+        <Snob>{"I wanted to ask him if he was available for work..."}</Snob>
       </Dialog>
     </Section>
   );
