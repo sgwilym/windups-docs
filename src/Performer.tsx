@@ -7,6 +7,7 @@ import { SectionContext } from "./Section";
 const rootStyle = css`
   display: flex;
   align-items: baseline;
+  margin-bottom: 1em;
 `;
 
 const textStyle = css`

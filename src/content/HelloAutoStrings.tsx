@@ -4,7 +4,6 @@ import Dialog from "../Dialog";
 import Snob from "../performers/Snob";
 import FanGirl from "../performers/Fangirl";
 import DialogElement from "../DialogElement";
-import Bat from "../performers/Bat";
 import { Pause } from "auto-strings";
 import Clive from "../performers/Clive";
 

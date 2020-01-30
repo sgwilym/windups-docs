@@ -9,8 +9,8 @@ import { SectionContext } from "./Section";
 const NextListener: React.FC = () => {
   const isFinished = useIsFinished();
   const skip = useSkip();
-  const { proceed, isFinished: dialogIsFinished } = useContext(DialogContext);
-  const { isActive } = useContext(DialogChildContext);
+  const { isFinished: dialogIsFinished } = useContext(DialogContext);
+  const { proceed, isActive } = useContext(DialogChildContext);
   const { activeSectionID } = useContext(SectionFocusContext);
   const { id } = useContext(SectionContext);
   const isTotallyActive = isActive && activeSectionID === id;
@@ -29,11 +29,20 @@ const NextListener: React.FC = () => {
 };
 
 const NextButton: React.FC = () => {
-  const { proceed, isFinished: dialogIsFinished } = useContext(DialogContext);
-  const { isActive } = useContext(DialogChildContext);
+  const { setActiveSectionID } = useContext(SectionFocusContext);
+  const { id } = useContext(SectionContext);
+  const { isFinished: dialogIsFinished } = useContext(DialogContext);
+  const { proceed, isActive } = useContext(DialogChildContext);
 
   return !dialogIsFinished && isActive ? (
-    <button onClick={proceed}>{"►"}</button>
+    <button
+      onClick={() => {
+        setActiveSectionID(id);
+        proceed();
+      }}
+    >
+      {"►"}
+    </button>
   ) : null;
 };
 
@@ -45,7 +54,7 @@ const DialogElement: React.FC<DialogElementProps> = ({
   children,
   autoProceed
 }) => {
-  const { proceed } = useContext(DialogContext);
+  const { proceed } = useContext(DialogChildContext);
 
   return (
     <TextPanel>

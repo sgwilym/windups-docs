@@ -11,16 +11,18 @@ import { SectionFocusContext } from "./App";
 import { SectionContext } from "./Section";
 
 export const DialogContext = React.createContext({
-  proceed: () => {},
   isFinished: false
 });
 
 export const DialogChildContext = React.createContext({
-  isActive: false
+  isActive: false,
+  proceed: () => {}
 });
 
-function useKeepInViewer(dependency: any) {
+function useKeepInViewer(height: number) {
   const measurementRef = useRef<HTMLDivElement>();
+  const prevHeightRef = useRef(height);
+  const { isActive } = useContext(SectionContext);
 
   const [inViewRef, isInView] = useInView({
     rootMargin: "-100px 0px"
@@ -39,13 +41,28 @@ function useKeepInViewer(dependency: any) {
       return;
     }
 
-    if (!isInView) {
+    // only scroll there within a certain threshold....
+
+    const scrollBottom = window.scrollY + window.innerHeight;
+    const bottomPos =
+      measurementRef.current.offsetTop + measurementRef.current.offsetHeight;
+
+    const isJustOutOfView = Math.abs(scrollBottom - bottomPos) < 200;
+
+    if (
+      !isInView &&
+      isActive &&
+      height !== prevHeightRef.current &&
+      isJustOutOfView
+    ) {
       window.scrollTo({
         top: measurementRef.current.offsetTop - (window.innerHeight / 3) * 2,
         behavior: "smooth"
       });
     }
-  }, [dependency]);
+
+    prevHeightRef.current = height;
+  }, [isInView, isActive, height]);
 
   return <div ref={setRef} />;
 }
@@ -55,19 +72,24 @@ const Dialog: React.FC = ({ children }) => {
   const activeChildIndex = numberOfChildrenToShow - 1;
   const rootRef = useRef(null);
   const { height } = useSize(rootRef);
-  const { activeSectionID, setActiveSectionID } = useContext(
-    SectionFocusContext
-  );
+  const { activeSectionID } = useContext(SectionFocusContext);
   const { id } = useContext(SectionContext);
   const isDialogActive = activeSectionID === id;
-  const keepy = useKeepInViewer(isDialogActive ? height : false);
+  const keepy = useKeepInViewer(height);
 
   const shownChildren = React.Children.toArray(children)
     .slice(0, numberOfChildrenToShow)
     .map((child, i) => (
       <DialogChildContext.Provider
         key={i}
-        value={{ isActive: i === activeChildIndex }}
+        value={{
+          isActive: i === activeChildIndex,
+          proceed: () => {
+            if (i + 2 > numberOfChildrenToShow && isDialogActive) {
+              setNumberOfChildrenToShow(i + 2);
+            }
+          }
+        }}
       >
         {child}
       </DialogChildContext.Provider>
@@ -76,10 +98,6 @@ const Dialog: React.FC = ({ children }) => {
   return (
     <DialogContext.Provider
       value={{
-        proceed: () => {
-          setActiveSectionID(id);
-          setNumberOfChildrenToShow(prev => prev + 1);
-        },
         isFinished: numberOfChildrenToShow >= React.Children.count(children)
       }}
     >
