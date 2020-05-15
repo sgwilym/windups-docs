@@ -1,65 +1,498 @@
-import React, { useState } from "react";
-import Uses from "./content/Uses";
-import WhatIsIt from "./content/WhatIsIt";
-import { css } from "linaria";
-import { AutoString, Pace } from "auto-strings";
-import Decorating from "./content/Decorating";
-import HelloAutoStrings from "./content/HelloAutoStrings";
-import Controlling from "./content/Controlling";
+import React from "react";
+import { css, cx } from "linaria";
+import Chat from "./content/Chat";
+import Heading from "./Heading";
+import Banner from "./Banner";
+import Subheading from "./Subheading";
+import {
+  BrowserRouter as Router,
+  Route,
+  NavLink,
+  NavLinkProps,
+  useLocation
+} from "react-router-dom";
+import { GREY, TEXT_PINK, GREEN } from "./colours";
+import { useInView } from "react-intersection-observer";
+import PointerHand from "./point.svg";
+import useInternetTime from "use-internet-time";
+import QuickStart from "./content/QuickStart";
+import Guides from "./content/Guides";
+import APIDocs from "./content/APIDocs";
+import KeyIcon from "./images/key-menu.svg";
+import CompassIcon from "./images/compass-menu.svg";
+import FrogIcon from "./images/frog-menu.svg";
+import KeyboardIcon from "./images/keyboard-menu.svg";
+import Megayaki from "./images/mega-yaki.svg";
+import SnowmanKebab from "./images/snowman-kebab.svg";
+import RufflePizza from "./images/ruffle-pizza.svg";
+import { useWindupString, CharWrapper } from "windups";
+import Cutlery from "./images/forks.svg";
 
-const rootStyle = css`
-  padding: 0;
-  margin: 0;
+type SectionProps = {
+  title: string;
+  right?: boolean;
+};
+
+const sectionRootStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 `;
 
-const contentStyle = css`
-  margin: auto;
-  max-width: 32em;
-  padding-bottom: 7em;
-`;
-
-const titleStyle = css`
-  margin: auto;
-  font-size: 36pt;
-  font-family: sans-serif;
-  text-align: center;
-  padding: 1em 0;
-`;
-
-export const SectionFocusContext = React.createContext<{
-  activeSectionID: string | null;
-  setActiveSectionID: Function;
-}>({
-  activeSectionID: null,
-  setActiveSectionID: () => {}
-});
-
-const App: React.FC = () => {
-  const [activeSectionID, setActiveSectionID] = useState<string | null>(null);
+const Section: React.FC<SectionProps> = ({ title, children, right }) => {
+  const [titlePrinted, setIsTitlePrinted] = React.useState(false);
 
   return (
-    <div className={rootStyle}>
-      <AutoString>
-        <div className={titleStyle}>
-          <Pace ms={100}>{"auto-strings"}</Pace>
-        </div>
-      </AutoString>
-      <SectionFocusContext.Provider
-        value={{
-          activeSectionID,
-          setActiveSectionID
+    <div className={sectionRootStyle}>
+      <Heading
+        onFinished={() => {
+          setTimeout(() => {
+            setIsTitlePrinted(true);
+          }, 300);
         }}
+        right={right}
       >
-        <div className={contentStyle}>
-          <WhatIsIt />
-          <Uses />
-          <HelloAutoStrings />
-          <Decorating />
-          <Controlling />
-        </div>
-      </SectionFocusContext.Provider>
+        {title}
+      </Heading>
+      {titlePrinted && children}
     </div>
   );
 };
 
-export default App;
+const contentStyle = css`
+  grid-column: 2/9;
+  margin: 72px 0;
+  transform: translateZ(0);
+`;
+
+const navStyle = css`
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 1em;
+  background: ${GREY};
+  z-index: 100;
+  font-family: "Menlo", monospace;
+  font-style: italic;
+  padding: 16px 0px;
+  display: flex;
+  justify-content: space-between;
+  grid-column: 2/9;
+  border-radius: 8px;
+  border: 2px black solid;
+  margin-top: 1em;
+  padding: 8px;
+  align-items: center;
+`;
+
+const activeLinkStyle = css`
+  text-decoration-color: ${TEXT_PINK};
+`;
+
+const screenStyle = css`
+  min-height: 100vh;
+`;
+
+const Screen: React.FC = ({ children }) => {
+  return <div className={screenStyle}>{children}</div>;
+};
+
+const pointingStyle = css`
+  @keyframes drift {
+    50% {
+      transform: translateY(-25%);
+    }
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  animation-name: drift, fadeIn;
+  animation-duration: 1s;
+  animation-iteration-count: infinite, 1;
+  animation-timing-function: ease-in-out;
+  text-align: center;
+`;
+
+const pointerIntroStyle = css`
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Pointer: React.FC = () => {
+  return (
+    <div className={cx(pointingStyle)}>
+      <img src={PointerHand} alt={"A hand pointing down"} />
+    </div>
+  );
+};
+
+const IntroScreen = () => {
+  const [bannerFinished, setIsBannerFinished] = React.useState(false);
+  const [chatFinished, setChatFinished] = React.useState(false);
+
+  return (
+    <Screen>
+      <Banner onFinished={() => setIsBannerFinished(true)} />
+      {bannerFinished && (
+        <Section title={"Make text come alive!"}>
+          <Chat onFinished={() => setChatFinished(true)} />
+        </Section>
+      )}
+
+      {chatFinished && (
+        <div className={pointerIntroStyle}>
+          <Pointer />
+        </div>
+      )}
+    </Screen>
+  );
+};
+
+const itemRootStyle = css`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Menlo, sans-serif;
+  font-size: 1.2em;
+`;
+
+const nameStyle = css`
+  margin: 0.6em 0;
+  transform: skew(5deg, 5deg);
+  color: white;
+  background-color: black;
+  padding: 8px;
+`;
+
+const ctaCharStyle = css`
+  @keyframes slam {
+    from {
+      transform: scale(7) rotate(30deg);
+      opacity: 0;
+    }
+    to {
+      transform: scale(1) rotate(-10deg);
+      opacity: 1;
+    }
+  }
+  animation-name: slam;
+  animation-duration: 600ms;
+  animation-iteration-count: 1;
+  animation-timing-function: cubic-bezier(0.82, -0.35, 1, 1);
+  animation-fill-mode: both;
+  color: ${GREEN};
+  display: inline-block;
+`;
+
+const strikethroughStyle = css`
+  margin-right: 0.5em;
+  text-decoration-color: ${GREEN};
+  text-decoration-thickness: 2px;
+`;
+
+const CtaChar: React.FC = ({ children }) => {
+  return <span className={ctaCharStyle}>{children}</span>;
+};
+
+const MenuItem: React.FC<{
+  name: string;
+  img: string;
+  price: number;
+  discountedPrice?: number;
+}> = ({ img, name, discountedPrice, price }) => {
+  const [wasInViewRef, wasInView] = useWasInView();
+  const [windup] = useWindupString(
+    wasInView && discountedPrice ? `ƒ${discountedPrice}!` : "",
+    {
+      pace: () => 450
+    }
+  );
+
+  return (
+    <div className={itemRootStyle}>
+      <img src={img} />
+      <div ref={wasInViewRef} className={nameStyle}>
+        {name}
+      </div>
+      <div>
+        {discountedPrice ? (
+          <>
+            <s className={strikethroughStyle}>{`ƒ${price}`}</s>
+            {wasInView && <CharWrapper element={CtaChar}>{windup}</CharWrapper>}
+          </>
+        ) : (
+          `ƒ${price}`
+        )}
+      </div>
+    </div>
+  );
+};
+
+const pizzaRowStyle = css`
+  display: flex;
+  justify-content: center;
+`;
+
+const secondRowStyle = css`
+  display: flex;
+  justify-content: space-around;
+`;
+
+const menuStyle = css`
+  @keyframes drift {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 150px 90px;
+    }
+  }
+  animation-name: drift;
+  animation-duration: 20s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  background-color: white;
+  border: 3px solid black;
+  padding: 16px;
+  transform: translateZ(0) rotate(3deg);
+  border-radius: 2px;
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
+  background-image: url(${Cutlery});
+  background-size: 150px 90px;
+`;
+
+function useWasInView(): [() => void, boolean] {
+  const [wasInView, setWasInView] = React.useState(false);
+  const [inViewRef, isInView] = useInView({
+    rootMargin: "-100px 0px"
+  });
+
+  React.useEffect(() => {
+    if (isInView && !wasInView) {
+      setWasInView(true);
+    }
+  }, [isInView, wasInView]);
+
+  return [inViewRef, wasInView];
+}
+
+const AttentionScreen: React.FC = () => {
+  const [wasInViewRef, wasInView] = useWasInView();
+
+  return (
+    <Screen>
+      <div ref={wasInViewRef}>
+        {wasInView && <Section title={"Call attention!"} right></Section>}
+      </div>
+      <div className={menuStyle}>
+        <div className={pizzaRowStyle}>
+          <MenuItem name={"Mega-Yaki"} img={Megayaki} price={500} />
+        </div>
+        <div className={secondRowStyle}>
+          <MenuItem
+            name={"Ruffle Pizza"}
+            img={RufflePizza}
+            price={400}
+            discountedPrice={200}
+          />
+          <MenuItem name={"Snowman Kebab"} img={SnowmanKebab} price={300} />
+        </div>
+      </div>
+    </Screen>
+  );
+};
+
+const SMASH_MS = 300;
+
+const smashStyles = css`
+  @keyframes smash {
+    0% {
+      transform: translate(0, 10px);
+    }
+    10% {
+      transform: translate(20px, -30px);
+    }
+    20% {
+      transform: translate(-12px, 17px);
+    }
+    40% {
+      transform: translate(7px, -9px);
+    }
+    60% {
+      transform: translate(-3px, 4px);
+    }
+    80% {
+      transform: translate(1px, -1px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  animation-name: smash;
+  animation-duration: ${SMASH_MS}ms;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+`;
+
+export const SFXContext = React.createContext({
+  smash: () => {}
+});
+
+const SFX: React.FC = ({ children }) => {
+  const [isSmashing, setIsSmashing] = React.useState(false);
+
+  const smash = React.useCallback(() => {
+    setIsSmashing(true);
+  }, []);
+
+  React.useEffect(() => {
+    if (isSmashing) {
+      setTimeout(() => {
+        setIsSmashing(false);
+      }, SMASH_MS);
+    }
+  }, [isSmashing]);
+
+  return (
+    <SFXContext.Provider value={{ smash }}>
+      <div className={cx(isSmashing && smashStyles)}>{children}</div>
+    </SFXContext.Provider>
+  );
+};
+
+const gridStyles = css`
+  display: grid;
+  grid-template-columns: 1fr repeat(7, 96px) 1fr;
+  column-gap: 8px;
+  background: #eeeeee;
+`;
+
+const subgridStyles = css`
+  display: grid;
+  grid-template-columns: repeat(7, 96px);
+  column-gap: 8px;
+`;
+
+const indentStyle = css`
+  grid-column: 2/8;
+`;
+
+const Grid: React.FC = ({ children }) => {
+  return <div className={gridStyles}>{children}</div>;
+};
+
+export const SubGrid: React.FC = ({ children }) => {
+  return <div className={subgridStyles}>{children}</div>;
+};
+
+export const Indent1: React.FC = ({ children }) => (
+  <div className={indentStyle}>{children}</div>
+);
+
+const navMenuLinkStyle = css`
+  display: flex;
+  align-items: center;
+  flex: 0 1 auto;
+  color: black;
+  text-decoration-thickness: 2px;
+  margin-right: 1em;
+  text-transform: lowercase;
+
+  &:hover {
+    color: ${TEXT_PINK};
+    text-decoration-color: black;
+  }
+
+  img {
+    margin-right: 0.3em;
+  }
+`;
+
+const NavMenuLink: React.FC<NavLinkProps> = ({ children, ...props }) => (
+  <NavLink {...props} className={navMenuLinkStyle}>
+    {children}
+  </NavLink>
+);
+
+const internetTimeStyle = css`
+  text-align: right;
+  flex: 1 0 auto;
+`;
+
+const Time = () => {
+  const time = useInternetTime();
+  return <div className={internetTimeStyle}>{time}</div>;
+};
+
+function useScrollToTop() {
+  const { pathname } = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+}
+
+const App: React.FC = () => {
+  useScrollToTop();
+
+  return (
+    <Grid>
+      <nav className={cx(navStyle)} title="Navigation">
+        <NavMenuLink exact activeClassName={activeLinkStyle} to={"/"}>
+          <img src={KeyIcon} aria-hidden alt={"A wind-up key"} />
+          {"windups"}
+        </NavMenuLink>
+        <NavMenuLink activeClassName={activeLinkStyle} to={"/quick"}>
+          <img src={CompassIcon} aria-hidden alt={"A compass"} />
+          {"Lookup"}
+        </NavMenuLink>
+        <NavMenuLink activeClassName={activeLinkStyle} to={"/guides"}>
+          <img src={FrogIcon} aria-hidden alt={"A frog"} />
+          {"Guides"}
+        </NavMenuLink>
+        <NavMenuLink
+          activeClassName={activeLinkStyle}
+          to={"/api"}
+          title={"A.P.I."}
+        >
+          <img src={KeyboardIcon} aria-hidden alt={"A tiny keyboard"} />
+          {"API"}
+        </NavMenuLink>
+        <Time />
+      </nav>
+
+      <div className={contentStyle}>
+        <SFX>
+          <Route exact path={"/"}>
+            <IntroScreen />
+            <AttentionScreen />
+          </Route>
+          <Route exact path={"/guides"}>
+            <Guides />
+          </Route>
+          <Route exact path={"/quick"}>
+            <QuickStart />
+          </Route>
+          <Route exact path={"/api"}>
+            <APIDocs />
+          </Route>
+        </SFX>
+      </div>
+    </Grid>
+  );
+};
+
+const AppWithRouter = () => (
+  <Router>
+    <App />
+  </Router>
+);
+
+export default AppWithRouter;

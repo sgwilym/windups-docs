@@ -1,23 +1,30 @@
 {
-  "name": "auto-text-docs",
+  "name": "windup-docs",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@craco/craco": "^5.5.0",
+    "@reach/visually-hidden": "^0.10.1",
     "@rehooks/component-size": "^1.0.3",
     "@rooks/use-key": "^3.4.3",
     "@types/jest": "24.0.18",
     "@types/node": "12.7.12",
     "@types/react": "16.9.5",
     "@types/react-dom": "16.9.1",
-    "auto-strings": "link:../auto-strings/pkg",
     "linaria": "^1.3.1",
-    "react": "^16.10.2",
-    "react-dom": "^16.10.2",
+    "react": "16.10.2",
+    "react-dom": "16.10.2",
     "react-intersection-observer": "^8.25.2",
+    "react-router": "^5.1.2",
+    "react-router-dom": "^5.1.2",
+    "react-router-hash-link": "^1.2.2",
     "react-scripts": "^3.3.0",
+    "resize-observer-polyfill": "^1.5.1",
+    "scroll-behavior-polyfill": "^2.0.13",
     "typescript": "3.7.2",
-    "use-internet-time": "^1.0.1"
+    "use-debounce": "^3.4.1",
+    "use-internet-time": "^1.0.1",
+    "windups": "link:../windups/pkg"
   },
   "scripts": {
     "start": "craco start",
@@ -41,6 +48,8 @@
     ]
   },
   "devDependencies": {
+    "@types/react-router-dom": "^5.1.3",
+    "@types/react-router-hash-link": "^1.2.1",
     "core-js": "2",
     "craco-linaria": "^1.1.2"
   }

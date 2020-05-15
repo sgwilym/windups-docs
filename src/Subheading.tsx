@@ -2,10 +2,11 @@ import React from "react";
 import { css } from "linaria";
 
 const rootStyle = css`
-  font-family: sans-serif;
+  font-family: Menlo, monospace;
   margin: 2em 0 1em 0;
-  padding: 0 0 1em 0;
-  border-bottom: 1px solid black;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 18px;
 `;
 
 const Subheading: React.FC = ({ children }) => {

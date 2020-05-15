@@ -1,4 +1,4 @@
-import { useRewind } from "auto-strings";
+import { useRewind } from "windups";
 import useKey from "@rooks/use-key";
 import { useContext } from "react";
 import { DialogChildContext } from "./Dialog";

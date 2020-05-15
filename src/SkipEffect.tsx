@@ -1,5 +1,5 @@
 import React from "react";
-import { useSkip, Effect } from "auto-strings";
+import { useSkip, Effect } from "windups";
 
 const SkipEffect = () => {
   const skip = useSkip();

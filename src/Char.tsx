@@ -1,17 +1,16 @@
 import React, { useContext } from "react";
 import { css, cx } from "linaria";
+import { CharWrapper, Pace } from "windups";
+import { PINK, TEXT_PINK } from "./colours";
 
 export const CharContext = React.createContext({ animated: false });
 
-export const CHAR_FONT_STYLE = "18pt sans-serif";
+export const CHAR_FONT_STYLE = "18pt 'Arial'";
 
 const charStyle = css`
   display: inline-block;
   font: ${CHAR_FONT_STYLE};
-`;
-
-const red = css`
-  color: red;
+  transform: translateZ(0);
 `;
 
 const animatingStyle = css`
@@ -22,7 +21,6 @@ const animatingStyle = css`
     }
     to {
       opacity: 1;
-      transform: scale(1) rotate(0deg);
     }
   }
   animation-name: enter;
@@ -32,10 +30,6 @@ const animatingStyle = css`
 export const StandardChar: React.FC = ({ children }) => {
   const { animated } = useContext(CharContext);
 
-  if (children === "\n") {
-    return <>{children}</>;
-  }
-
   return (
     <span className={cx(charStyle, animated && animatingStyle)}>
       {children}
@@ -43,10 +37,66 @@ export const StandardChar: React.FC = ({ children }) => {
   );
 };
 
-export const AngryChar: React.FC = ({ children }) => {
+const dropStyle = css`
+  @keyframes enter {
+    0% {
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    25% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -100%, 0);
+      transform-style: preserve-3d;
+    }
+    0%,
+    50%,
+    88%,
+    96%,
+    100% {
+      animation-timing-function: cubic-bezier(0.12, 0.52, 0.57, 1);
+      transform: translate3d(0, 0, 0);
+      transform-style: preserve-3d;
+    }
+    75% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -33%, 0);
+      transform-style: preserve-3d;
+    }
+    94% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -11%, 0);
+      transform-style: preserve-3d;
+    }
+    97% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -3%, 0);
+      transform-style: preserve-3d;
+    }
+  }
+  animation-name: enter;
+  animation-duration: 500ms;
+`;
+
+const emphasisStyle = css`
+  color: ${TEXT_PINK};
+`;
+
+const EmphasisChar: React.FC = ({ children }) => {
   return (
-    <StandardChar>
-      <div className={red}>{children}</div>
-    </StandardChar>
+    <span className={cx(charStyle, dropStyle, emphasisStyle)}>{children}</span>
   );
+};
+
+export const Emphasis: React.FC = ({ children }) => {
+  return <CharWrapper element={EmphasisChar}>{children}</CharWrapper>;
+};
+
+const DropChar: React.FC = ({ children }) => {
+  return <span className={cx(charStyle, dropStyle)}>{children}</span>;
+};
+
+export const Dropped: React.FC = ({ children }) => {
+  return <CharWrapper element={DropChar}>{children}</CharWrapper>;
 };

@@ -7,8 +7,16 @@ import React, {
 } from "react";
 import { useInView } from "react-intersection-observer";
 import useSize from "@rehooks/component-size";
-import { SectionFocusContext } from "./App";
+import SectionFocusContext from "./SectionFocusContext";
 import { SectionContext } from "./Section";
+
+if (!("scrollBehavior" in document.documentElement.style)) {
+  import("scroll-behavior-polyfill");
+}
+
+if (!("ResizeObserver" in window)) {
+  (global as any).ResizeObserver = import("resize-observer-polyfill");
+}
 
 export const DialogContext = React.createContext({
   isFinished: false
@@ -55,7 +63,7 @@ function useKeepInViewer(height: number) {
       height !== prevHeightRef.current &&
       isJustOutOfView
     ) {
-      window.scrollTo({
+      window.scroll({
         top: measurementRef.current.offsetTop - (window.innerHeight / 3) * 2,
         behavior: "smooth"
       });

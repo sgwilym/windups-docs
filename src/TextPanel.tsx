@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Linebreaker, AutoString, CharWrapper } from "auto-strings";
+import { Linebreaker, WindupChildren, CharWrapper } from "windups";
 import { css } from "linaria";
 import useSize from "@rehooks/component-size";
 import { CHAR_FONT_STYLE, StandardChar, CharContext } from "./Char";
@@ -16,13 +16,15 @@ const TextPanel: React.FC = ({ children }) => {
     <CharContext.Provider value={{ animated: !isFinished }}>
       <div ref={panelRef} className={rootStyle}>
         <Linebreaker fontStyle={CHAR_FONT_STYLE} width={panelWidth}>
-          <AutoString
-            onFinished={() => setIsFinished(true)}
+          <WindupChildren
+            onFinished={() => {
+              setIsFinished(true);
+            }}
             skipped={isFinished}
           >
             <RewindListener onRewind={() => setIsFinished(false)} />
             <CharWrapper element={StandardChar}>{children}</CharWrapper>
-          </AutoString>
+          </WindupChildren>
         </Linebreaker>
       </div>
     </CharContext.Provider>

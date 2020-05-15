@@ -1,0 +1,10 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "yarn build"
+    }
+  },
+  "identifier" : "5223FE37-D050-4208-8C24-09849B29074C",
+  "openLogOnRun" : "finish"
+}

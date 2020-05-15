@@ -1,5 +1,5 @@
 import React from "react";
-import { useRewind, Effect } from "auto-strings";
+import { useRewind, Effect } from "windups";
 import { useContext } from "react";
 import { DialogChildContext } from "./Dialog";
 
