@@ -88,7 +88,7 @@ const Doc: React.FC<DocProps> = ({
   guides,
   extraInfo,
   basicExample,
-  id,
+  id
 }) => {
   const { hash } = useLocation();
 
@@ -104,7 +104,7 @@ const Doc: React.FC<DocProps> = ({
             {guides && (
               <>
                 <Subheading>{"Guides"}</Subheading>
-                {guides.map((guide) => (
+                {guides.map(guide => (
                   <BlockLink
                     to={`/guides/${guide.path}`}
                     key={guide.path}
@@ -127,7 +127,7 @@ const Doc: React.FC<DocProps> = ({
             {props && (
               <>
                 <Subheading>{"Props"}</Subheading>
-                {props.map((p) => {
+                {props.map(p => {
                   return <PropBit key={p.sig} info={p} />;
                 })}
               </>
@@ -154,7 +154,7 @@ const docs: DocProps[] = [
     shortDesc:
       "given a string and some options, this hook returns a tuple containing a string and some handy extras.",
     extraInfo: [
-      "If the string you pass to useWindupString changes, the windup effect will restart from the beginning.",
+      "If the string you pass to useWindupString changes, the windup effect will restart from the beginning."
     ],
     basicExample: `const MyStringyWindup = () => {
     const [windup] = useWindupString("Hello world!");
@@ -189,9 +189,9 @@ const docs: DocProps[] = [
     guides: [
       {
         name: "Make a stringy windup",
-        path: "/guides#stringy-windup",
-      },
-    ],
+        path: "/guides#stringy-windup"
+      }
+    ]
   },
   {
     id: "windup-children",
@@ -209,28 +209,28 @@ const docs: DocProps[] = [
       "A component that creates a windup effect out of children provided to it, which makes windups with differently styled parts possible.",
     extraInfo: [
       "As the name implies, the WindupChildren component only works on text passed to components as children. For example, if WindupChildren is passed a component that renders text from a source other than the children prop, it will not be able to detect that text and will not include it in the windup effect.",
-      "If the shape of the children or their props changes, the windup effect will start over.",
+      "If the shape of the children or their props changes, the windup effect will start over."
     ],
     props: [
       {
         sig: "onFinished: () => void",
-        desc: "A function that fires when the windup effect finishes.",
+        desc: "A function that fires when the windup effect finishes."
       },
       {
         sig: "skipped: boolean",
-        desc: "Whether to windup effect is skipped or not",
+        desc: "Whether to windup effect is skipped or not"
       },
       {
         sig: "children: node",
-        desc: "The React children to be turned into a windup",
-      },
+        desc: "The React children to be turned into a windup"
+      }
     ],
     guides: [
       {
         name: "Styling text segments",
-        path: "/guides#styling-text-segments",
-      },
-    ],
+        path: "/guides#styling-text-segments"
+      }
+    ]
   },
   {
     id: "pause",
@@ -246,17 +246,17 @@ const docs: DocProps[] = [
   );
 }`,
     props: [
-      { desc: "The number of milliseconds to pause for.", sig: "ms: number" },
+      { desc: "The number of milliseconds to pause for.", sig: "ms: number" }
     ],
     extraInfo: [
-      "For <WindupChildren> to detect <Pause>, it must be passed through a component's children prop.",
+      "For <WindupChildren> to detect <Pause>, it must be passed through a component's children prop."
     ],
     guides: [
       {
         name: "Getting timing right",
-        path: "/guides#timing",
-      },
-    ],
+        path: "/guides#timing"
+      }
+    ]
   },
   {
     id: "effect",
@@ -275,15 +275,15 @@ const docs: DocProps[] = [
     props: [
       {
         desc: "The function to fire when this renders.",
-        sig: "fn: () => void",
-      },
+        sig: "fn: () => void"
+      }
     ],
     guides: [
       {
         name: "Calling your own functions",
-        path: "/guides#calling-functions",
-      },
-    ],
+        path: "/guides#calling-functions"
+      }
+    ]
   },
   {
     id: "pace",
@@ -301,23 +301,23 @@ const docs: DocProps[] = [
       {
         desc:
           "The number of milliseconds to use as the pace for every character.",
-        sig: "ms: number",
+        sig: "ms: number"
       },
       {
         desc:
           "A function that returns the number of milliseconds to wait until the adding the next character.",
-        sig: "fn: (char: string) => number",
-      },
+        sig: "fn: (char: string) => number"
+      }
     ],
     extraInfo: [
-      "For <WindupChildren> to detect <Pace>, it must be passed through a component's children prop.",
+      "For <WindupChildren> to detect <Pace>, it must be passed through a component's children prop."
     ],
     guides: [
       {
         name: "Getting timing right",
-        path: "/guides#timing",
-      },
-    ],
+        path: "/guides#timing"
+      }
+    ]
   },
   {
     id: "on-char",
@@ -333,15 +333,15 @@ const docs: DocProps[] = [
     props: [
       {
         desc: "A function to fire when each character is printed",
-        sig: "fn: (char: string) => void",
-      },
+        sig: "fn: (char: string) => void"
+      }
     ],
     guides: [
       {
         name: "Calling your own functions",
-        path: "/guides#calling-functions",
-      },
-    ],
+        path: "/guides#calling-functions"
+      }
+    ]
   },
   {
     id: "char-wrapper",
@@ -359,18 +359,18 @@ const docs: DocProps[] = [
       {
         desc:
           "The element to wrap each character in. Can be a React component or a HTML element.",
-        sig: "element: ReactElement",
-      },
+        sig: "element: ReactElement"
+      }
     ],
     extraInfo: [
-      "CharWrapper will automatically break up strings provided to it into characters and wrap each one. If its children contains any React components, it will treat it as a character and wrap it.",
+      "CharWrapper will automatically break up strings provided to it into characters and wrap each one. If its children contains any React components, it will treat it as a character and wrap it."
     ],
     guides: [
       {
         name: "Animating individual characters",
-        path: "/guides#animating-characters",
-      },
-    ],
+        path: "/guides#animating-characters"
+      }
+    ]
   },
   {
     id: "linebreaker",
@@ -389,24 +389,24 @@ const docs: DocProps[] = [
     props: [
       {
         desc: "A string representing a CSS font style.",
-        sig: "fontStyle: string",
+        sig: "fontStyle: string"
       },
       {
         desc: "The width that the text should break on in pixels",
-        sig: "width: number",
-      },
+        sig: "width: number"
+      }
     ],
     extraInfo: [
       "Linebreaker must be used outside of WindupChildren, and not the other way around.",
       "The font style of text rendered within Linebreaker must match that provided to the fontStyle prop",
-      "Arbitrary components used inside of Linebreaker must not add extra width to the layout.",
+      "Arbitrary components used inside of Linebreaker must not add extra width to the layout."
     ],
     guides: [
       {
         name: "Breaking lines",
-        path: "/guides#breaking-lines",
-      },
-    ],
+        path: "/guides#breaking-lines"
+      }
+    ]
   },
   {
     id: "use-skip",
@@ -426,14 +426,14 @@ const MySkippableWindup = () => {
   );
 }`,
     extraInfo: [
-      "To work this must be called by a component rendered within <WindupChildren>.",
+      "To work this must be called by a component rendered within <WindupChildren>."
     ],
     guides: [
       {
         name: "Skip and Rewind",
-        path: "/guides#skip-rewind",
-      },
-    ],
+        path: "/guides#skip-rewind"
+      }
+    ]
   },
   {
     id: "use-rewind",
@@ -454,14 +454,14 @@ const MySkippableWindup = () => {
   );
 }`,
     extraInfo: [
-      "To work this must be called by a component rendered within <WindupChildren>.",
+      "To work this must be called by a component rendered within <WindupChildren>."
     ],
     guides: [
       {
         name: "Skip and Rewind",
-        path: "/guides#skip-rewind",
-      },
-    ],
+        path: "/guides#skip-rewind"
+      }
+    ]
   },
   {
     id: "use-is-finished",
@@ -482,9 +482,29 @@ const MySkippableWindup = () => {
   );
 }`,
     extraInfo: [
-      "To work this must be called by a component rendered within <WindupChildren>.",
-    ],
+      "To work this must be called by a component rendered within <WindupChildren>."
+    ]
   },
+  {
+    id: "text-from-children",
+    sig: "(children: React.ReactNode) => string",
+    title: "textFromChildren",
+    shortDesc:
+      "A function that returns the text content of React children, useful for enhancing accessibility.",
+    basicExample: `const windupText = textFromChildren(children);
+
+return (
+    <>
+      <VisuallyHidden>{text}</VisuallyHidden>
+      <div aria-hidden>
+        <WindupChildren>
+          {children}
+        </WindupChildren>
+      </div>
+  </>
+);
+    `
+  }
 ];
 
 const linkStyle = css`
@@ -500,14 +520,14 @@ const APIDocs: React.FC = () => {
           {"FYI, windups comes with its own Typescript type definitions."}
         </ExtraInfo>
         <nav>
-          {docs.map((d) => (
+          {docs.map(d => (
             <div className={linkStyle} key={d.id}>
               <BlockLink to={`/api#${d.id}`}>{d.title}</BlockLink>
             </div>
           ))}
         </nav>
       </Indent1>
-      {docs.map((d) => (
+      {docs.map(d => (
         <Doc key={d.id} {...d} />
       ))}
     </SubGrid>

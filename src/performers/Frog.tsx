@@ -42,7 +42,7 @@ type SetExpressionProps = {
 
 const SetExpression: React.FC<SetExpressionProps> = ({
   expression,
-  resting
+  resting,
 }) => {
   const { setExpression } = useContext(FrogContext);
   const { setAvatarFrames } = useContext(PerformerContext);
@@ -79,6 +79,7 @@ export const HappyExpression = makeExpression("HAPPY");
 export const SmugExpression = makeExpression("SMUG");
 export const ShameExpression = makeExpression("SHAME");
 export const ShockExpression = makeExpression("SHOCK");
+export const MadExpression = makeExpression("MAD");
 
 type FrogFrameMap = {
   NORMAL: string[];
@@ -95,7 +96,7 @@ const frogFrameSets: FrogFrameMap = {
   MAD: madFrames,
   SMUG: smugFrames,
   SHAME: shameFrames,
-  SHOCK: shockFrames
+  SHOCK: shockFrames,
 };
 
 const frogRestingFrameSets: FrogFrameMap = {
@@ -104,7 +105,7 @@ const frogRestingFrameSets: FrogFrameMap = {
   MAD: madRestingFrames,
   SMUG: smugFrames,
   SHAME: shameRestingFrames,
-  SHOCK: shockRestingFrames
+  SHOCK: shockRestingFrames,
 };
 
 type FrogEmotion = keyof FrogFrameMap;
@@ -118,13 +119,13 @@ const FrogContext = createContext<{
   currentExpression: FrogEmotion;
 }>({
   setExpression: () => {},
-  currentExpression: "NORMAL"
+  currentExpression: "NORMAL",
 });
 
 const Frog: React.FC<FrogProps> = ({
   children,
   autoProceed,
-  expression: initialExpression = "NORMAL"
+  expression: initialExpression = "NORMAL",
 }) => {
   const [currentExpression, setCurrentExpression] = useState(initialExpression);
 

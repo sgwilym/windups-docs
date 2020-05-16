@@ -11,6 +11,7 @@ import Effects from "../guides/Effects";
 import Linebreaking from "../guides/Linebreaking";
 import SectionFocusContext from "../SectionFocusContext";
 import Heading from "../Heading";
+import ChangingValues from "../guides/ChangingValues";
 
 const Guides: React.FC = () => {
   const [activeSectionID, setActiveSectionID] = React.useState<string | null>(
@@ -35,6 +36,7 @@ const Guides: React.FC = () => {
       <SkipRewind />
       <Effects />
       <Linebreaking />
+      <ChangingValues />
     </SectionFocusContext.Provider>
   );
 };

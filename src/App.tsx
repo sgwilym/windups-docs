@@ -3,7 +3,6 @@ import { css, cx } from "linaria";
 import Chat from "./content/Chat";
 import Heading from "./Heading";
 import Banner from "./Banner";
-import Subheading from "./Subheading";
 import {
   BrowserRouter as Router,
   Route,
