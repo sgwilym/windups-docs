@@ -16,6 +16,10 @@ import AvSmug2 from "../images/frog/f-smug-open-2.svg";
 import AvShameResting from "../images/frog/f-shame-resting.svg";
 import AvShame1 from "../images/frog/f-shame-open-1.svg";
 import AvShame2 from "../images/frog/f-shame-open-2.svg";
+import AvShockResting from "../images/frog/f-shock-resting.svg";
+import AvShock1 from "../images/frog/f-shock-open-1.svg";
+import AvShock2 from "../images/frog/f-shock-open-2.svg";
+
 import { Effect } from "windups";
 
 export const normFrames = [AvNormResting, AvNorm1, AvNorm2];
@@ -28,6 +32,8 @@ export const smugFrames = [AvSmugResting, AvSmug1, AvSmug2];
 export const smugRestingFrames = [AvSmugResting];
 export const shameFrames = [AvShameResting, AvShame1, AvShame2];
 export const shameRestingFrames = [AvShameResting];
+export const shockFrames = [AvShockResting, AvShock1, AvShock2];
+export const shockRestingFrames = [AvShockResting];
 
 type SetExpressionProps = {
   expression: FrogEmotion;
@@ -72,6 +78,7 @@ function makeExpression(expr: FrogEmotion) {
 export const HappyExpression = makeExpression("HAPPY");
 export const SmugExpression = makeExpression("SMUG");
 export const ShameExpression = makeExpression("SHAME");
+export const ShockExpression = makeExpression("SHOCK");
 
 type FrogFrameMap = {
   NORMAL: string[];
@@ -79,6 +86,7 @@ type FrogFrameMap = {
   MAD: string[];
   SMUG: string[];
   SHAME: string[];
+  SHOCK: string[];
 };
 
 const frogFrameSets: FrogFrameMap = {
@@ -86,7 +94,8 @@ const frogFrameSets: FrogFrameMap = {
   HAPPY: laffFrames,
   MAD: madFrames,
   SMUG: smugFrames,
-  SHAME: shameFrames
+  SHAME: shameFrames,
+  SHOCK: shockFrames
 };
 
 const frogRestingFrameSets: FrogFrameMap = {
@@ -94,7 +103,8 @@ const frogRestingFrameSets: FrogFrameMap = {
   HAPPY: laffRestingFrames,
   MAD: madRestingFrames,
   SMUG: smugFrames,
-  SHAME: shameRestingFrames
+  SHAME: shameRestingFrames,
+  SHOCK: shockRestingFrames
 };
 
 type FrogEmotion = keyof FrogFrameMap;

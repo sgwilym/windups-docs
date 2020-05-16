@@ -16,6 +16,7 @@ const rootStyle = css`
   color: ${GREEN};
   background-color: black;
   line-height: 1.5;
+  overflow: auto;
 `;
 
 function randomInt(max: number) {

@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import Section from "../Section";
 import Dialog, { DialogChildContext } from "../Dialog";
-import Frog from "../performers/Frog";
+import Frog, { ShockExpression, ShameExpression } from "../performers/Frog";
 import CodeExample from "../CodeExample";
 import { useWindupString, CharWrapper, WindupChildren, Pace } from "windups";
 import SmashEffect from "../SmashEffect";
@@ -92,7 +92,7 @@ const fadeInAnimationStyle = css`
 const VanillaWindup = () => {
   const { proceed } = useContext(DialogChildContext);
   const [text] = useWindupString("Baked Beans On Toast", {
-    onFinished: proceed,
+    onFinished: proceed
   });
 
   return <div>{text}</div>;
@@ -107,7 +107,7 @@ const GhostlyWindup = () => {
 
   const [text] = useWindupString("Baked Beans On Toast", {
     onFinished: proceed,
-    pace: () => 200,
+    pace: () => 200
   });
 
   return (
@@ -146,7 +146,7 @@ const StylingCharacters: React.FC = () => {
           <VanillaWindup />
         </Example>
         <Frog>{"No? Still don't see it? Need a hint?"}</Frog>
-        <Frog>
+        <Frog expression={"MAD"}>
           {"It's "}
           <SmashEffect />
           {"boring!"}
@@ -165,7 +165,7 @@ const StylingCharacters: React.FC = () => {
             <Emphasis>{"Styyyyyyle."}</Emphasis>
           </Pace>
         </Frog>
-        <Frog>
+        <Frog expression={"MAD"}>
           <SmashEffect />
           {"Ya get me?!"}
         </Frog>
@@ -184,6 +184,7 @@ const StylingCharacters: React.FC = () => {
           {"See, a little animation turned what "}
           <Emphasis>{"was a menu item"}</Emphasis>
           {" into a "}
+          <ShockExpression />
           <Emphasis>{"chilling final warning"}</Emphasis>
           {"."}
         </Frog>
@@ -198,7 +199,7 @@ const StylingCharacters: React.FC = () => {
           }
         </Frog>
         <CodeExample>{WITHOUT_CHARWRAPPER_EXAMPLE}</CodeExample>
-        <Frog>{"But why would you?"}</Frog>
+        <Frog expression={"HAPPY"}>{"But why would you?"}</Frog>
         <Frog>
           {
             "Where you'll really want CharWrapper is when you use WindupChildren."
@@ -208,7 +209,7 @@ const StylingCharacters: React.FC = () => {
         <Example>
           <SpookyEmphasisedWindup />
         </Example>
-        <Frog>
+        <Frog expression="HAPPY">
           {
             "Without CharWrapper, you'd have to wrap each character individually! What a bore that'd be!"
           }
@@ -220,9 +221,10 @@ const StylingCharacters: React.FC = () => {
           <Emphasis>{"CSS transforms"}</Emphasis>
           {"."}
         </Frog>
-        <Frog>
+        <Frog expression={"SHOCK"}>
           {"CSS transforms "}
           <Emphasis>{"don't work on inline elements"}</Emphasis>
+          <ShameExpression />
           {
             "! So you'll probably have to render your characters as inline-block. Make sense?"
           }

@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
 import Section from "../Section";
 import Dialog, { DialogChildContext } from "../Dialog";
-import Frog from "../performers/Frog";
+import Frog, { ShockExpression } from "../performers/Frog";
 import SmashEffect from "../SmashEffect";
 import { useWindupString, WindupChildren, useSkip, Pace } from "windups";
 import Example from "../Example";
+import CodeExample from "../CodeExample";
 import { Emphasis } from "../Char";
 
-const SkipHookExample = () => {
-  const { proceed } = useContext(DialogChildContext);
+const SKIP_HOOK_EXAMPLE = `import { useWindupString } from "windups";
 
+const SkipHookExample = () => {
   const [text, { skip }] = useWindupString(
     "A fly? A fly! Why, oh why, would one cry for a fly?",
     {
@@ -24,7 +25,28 @@ const SkipHookExample = () => {
       <button onClick={skip}>{"Skip ahead"}</button>
     </div>
   );
+}`;
+
+const SkipHookExample = () => {
+  const { proceed } = useContext(DialogChildContext);
+
+  const [text, { skip }] = useWindupString(
+    "A fly? A fly! Why, oh why, would one cry for a fly?",
+    {
+      pace: () => 400,
+      onFinished: proceed
+    }
+  );
+
+  return (
+    <div>
+      <div>{text}</div>
+      <button onClick={skip}>{"Skip ahead"}</button>
+    </div>
+  );
 };
+
+const SKIP_CHILDREN_EXAMPLE = `import { WindupChildren, useSkip } from "windups";
 
 const SkipButton = () => {
   const skip = useSkip();
@@ -37,6 +59,25 @@ const SkippableWindupChildren = () => {
 
   return (
     <WindupChildren onFinished={proceed}>
+      <SkipButton />
+      <div>
+        <Pace ms={400}>
+          {"Why, if one would lie on a fly it would assuredly die."}
+        </Pace>
+      </div>
+    </WindupChildren>
+  );
+};`;
+
+const SkipButton = () => {
+  const skip = useSkip();
+
+  return <button onClick={skip}>{"Skip"}</button>;
+};
+
+const SkippableWindupChildren = () => {
+  return (
+    <WindupChildren>
       <SkipButton />
       <div>
         <Pace ms={400}>
@@ -66,6 +107,7 @@ const SkipAndRewind = () => {
           <Emphasis>{"skip"}</Emphasis>
           {" a windup."}
         </Frog>
+        <CodeExample>{SKIP_HOOK_EXAMPLE}</CodeExample>
         <Example>
           <SkipHookExample />
         </Example>
@@ -84,6 +126,7 @@ const SkipAndRewind = () => {
             "But how about WindupChildren? Where's the skip callback going to come from in there?"
           }
         </Frog>
+        <CodeExample>{SKIP_CHILDREN_EXAMPLE}</CodeExample>
         <Example>
           <SkippableWindupChildren />
         </Example>
@@ -92,12 +135,12 @@ const SkipAndRewind = () => {
             "You mighta' noticed that in the WindupChildren example, the SkipButton's rendered at the top."
           }
         </Frog>
-        <Frog>
+        <Frog expression={"SHAME"}>
           {
             "There's no easy way around this... anything using the useSkip hook needs to be rendered within WindupChildren to work. But that also makes it part of the windup effect!"
           }
         </Frog>
-        <Frog>
+        <Frog expression={"HAPPY"}>
           {
             "So if that SkipButton was put below the text, it wouldn't appear until all the text had printed out... which kinda misses the point, don't it?"
           }
@@ -117,16 +160,17 @@ const SkipAndRewind = () => {
         <Frog>
           {"Well, that just about cove-"}
           <SmashEffect />
+          <ShockExpression />
           {"Hold it!"}
         </Frog>
-        <Frog>
+        <Frog expression={"HAPPY"}>
           {
             "I can't believe I nearly forgot. Not all people are in a hustle-bustle to skip through windups."
           }
         </Frog>
         <Frog>{"Maybe some people want to savour it."}</Frog>
         <Frog>{"Experience it over and over."}</Frog>
-        <Frog>
+        <Frog expression={"HAPPY"}>
           {"In that case, there's a way to rewind the windup effect!"}
         </Frog>
         <Frog>
@@ -134,7 +178,7 @@ const SkipAndRewind = () => {
             "It pretty much works the same way for the hook and WindupChildren. Check the docs."
           }
         </Frog>
-        <Frog>
+        <Frog expression={"HAPPY"}>
           {
             "What? You were expecting more poems 'bout flies? I ain't got all day, kid."
           }
