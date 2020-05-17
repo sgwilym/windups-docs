@@ -89,14 +89,14 @@ const features: FeatureDesc[] = [
       {
         name: "useWindupString",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "Make a stringy windup",
         path: "/guides#stringy-windup",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Create animated text with different styles",
@@ -105,9 +105,9 @@ const features: FeatureDesc[] = [
       {
         name: "Styling text segments",
         path: "/guides#styling-text-segments",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Include non-string elements",
@@ -116,9 +116,9 @@ const features: FeatureDesc[] = [
       {
         name: "Windups with non-strings",
         path: "/guides#windups-non-strings",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Style many individual characters",
@@ -126,14 +126,14 @@ const features: FeatureDesc[] = [
       {
         name: "CharWrapper + WindupChildren",
         path: "/api#char-wrapper",
-        type: "API"
+        type: "API",
       },
       {
         name: "Animating invidual characters",
         path: "/guides#animating-characters",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Add arbitrary pauses",
@@ -142,9 +142,9 @@ const features: FeatureDesc[] = [
       {
         name: "Getting timing right",
         path: "/guides#timing",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Configure the pace of windup effect",
@@ -153,14 +153,14 @@ const features: FeatureDesc[] = [
       {
         name: "useWindupString pace option",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "Getting timing right",
         path: "/guides#timing",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Call functions upon addition of elements",
@@ -169,20 +169,20 @@ const features: FeatureDesc[] = [
       {
         name: "useWindupString onChar option",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "Calling your own functions",
         path: "/guides#calling-functions",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Call functions at arbitrary points",
     doesItWith: [
-      { name: "Effect + WindupChildren", path: "/api#effect", type: "API" }
-    ]
+      { name: "Effect + WindupChildren", path: "/api#effect", type: "API" },
+    ],
   },
   {
     capability: "Call function when windup effect finishes",
@@ -190,25 +190,25 @@ const features: FeatureDesc[] = [
       {
         name: "useWindupString onFinished option",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "onFinished prop of WindupChildren",
         path: "/api#windup-children",
-        type: "API"
+        type: "API",
       },
       {
         name: "useIsFinished + WindupChildren",
         path: "/api#use-is-finished",
-        type: "API"
+        type: "API",
       },
 
       {
         name: "Calling your own functions",
         path: "/guides#calling-functions",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Dynamically break lines based on width",
@@ -218,9 +218,9 @@ const features: FeatureDesc[] = [
       {
         name: "Breaking lines",
         path: "/guides#breaking-lines",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Skip the windup effect",
@@ -228,24 +228,24 @@ const features: FeatureDesc[] = [
       {
         name: "useSkip + WindupChildren",
         path: "/api#use-skip",
-        type: "API"
+        type: "API",
       },
       {
         name: "useWindupString skipped option",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "skip callback returned by useWindupString",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "Skip and Rewind",
         path: "/guides#skip-rewind",
-        type: "GUIDE"
-      }
-    ]
+        type: "GUIDE",
+      },
+    ],
   },
   {
     capability: "Rewind the windup effect",
@@ -253,20 +253,45 @@ const features: FeatureDesc[] = [
       {
         name: "useRewind + WindupChildren",
         path: "/api#use-rewind",
-        type: "API"
+        type: "API",
       },
       {
         name: "rewind callback returned by useWindupString",
         path: "/api#use-windup-string",
-        type: "API"
+        type: "API",
       },
       {
         name: "Skip and Rewind",
         path: "/guides#skip-rewind",
-        type: "GUIDE"
-      }
-    ]
-  }
+        type: "GUIDE",
+      },
+    ],
+  },
+  {
+    capability: "Make windups accessible",
+    doesItWith: [
+      {
+        name: "textFromChildren",
+        path: "/api#text-from-children",
+        type: "API",
+      },
+      {
+        name: "Accessibility",
+        path: "/guides#a11y",
+        type: "GUIDE",
+      },
+    ],
+  },
+  {
+    capability: "Use dynamic values with WindupChildren",
+    doesItWith: [
+      {
+        name: "Dynamic values",
+        path: "/guide#restarting",
+        type: "GUIDE",
+      },
+    ],
+  },
 ];
 
 const IWantToTable: React.FC = () => {
@@ -276,7 +301,7 @@ const IWantToTable: React.FC = () => {
       <Indent1>
         <table className={tableStyle}>
           <tbody>
-            {features.map(f => (
+            {features.map((f) => (
               <TableRow feature={f} />
             ))}
           </tbody>

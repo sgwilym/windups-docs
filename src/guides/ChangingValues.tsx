@@ -149,7 +149,7 @@ const ChangingValues: React.FC = () => {
         </Frog>
         <Frog>
           {"What it can't do is know if you changed the values of any "}
-          <Emphasis>{"objects, functions or components"}</Emphasis>
+          <Emphasis>{"components or their props"}</Emphasis>
           {" inside that."}
         </Frog>
         <Frog>
