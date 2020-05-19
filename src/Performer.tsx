@@ -59,14 +59,12 @@ function avatarReducer(state: string[], action: Action) {
 
 interface PerformerProps extends DialogElementProps {
   initialFrames: string[];
-  endFrame: string;
 }
 
 const Performer: React.FC<PerformerProps> = ({
   children,
   autoProceed,
-  initialFrames,
-  endFrame
+  initialFrames
 }) => {
   const { isActive: sectionIsActive } = useContext(SectionContext);
   const { isActive } = useContext(DialogChildContext);

@@ -34,7 +34,7 @@ const OnFinishHookExample = () => {
       onFinished: () => {
         alert("Finished!");
         proceed();
-      }
+      },
     }
   );
 
@@ -93,8 +93,8 @@ const ContrivedOnCharExample = () => {
   const [text] = useWindupString(
     "You'll probably want to do something more interesting than this!",
     {
-      onChar: () => setCount(prev => prev + 1),
-      onFinished: proceed
+      onChar: () => setCount((prev) => prev + 1),
+      onFinished: proceed,
     }
   );
 
@@ -135,7 +135,7 @@ const OnCharChildrenExample = () => {
 
 const Effects = () => {
   return (
-    <Section id={"calling-fns"} title={"Calling your own functions"}>
+    <Section id={"calling-functions"} title={"Calling your own functions"}>
       <Dialog>
         <Frog>
           {

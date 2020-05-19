@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import { css, cx } from "linaria";
-import { CharWrapper, Pace } from "windups";
-import { PINK, TEXT_PINK } from "./colours";
+import { CharWrapper } from "windups";
+import { TEXT_PINK } from "./colours";
 
 export const CharContext = React.createContext({ animated: false });
 
-export const CHAR_FONT_STYLE = "18pt 'Arial'";
+export const CHAR_FONT_STYLE = "14pt 'Menlo'";
 
 const charStyle = css`
   display: inline-block;

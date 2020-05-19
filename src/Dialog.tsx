@@ -23,7 +23,7 @@ export const DialogContext = React.createContext({
 });
 
 export const DialogChildContext = React.createContext({
-  isActive: false,
+  isActive: true,
   proceed: () => {}
 });
 

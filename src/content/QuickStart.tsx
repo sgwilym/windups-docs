@@ -287,7 +287,7 @@ const features: FeatureDesc[] = [
     doesItWith: [
       {
         name: "Dynamic values",
-        path: "/guide#restarting",
+        path: "/guides#restarting",
         type: "GUIDE",
       },
     ],

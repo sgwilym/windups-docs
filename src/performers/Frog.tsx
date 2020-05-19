@@ -20,7 +20,7 @@ import AvShockResting from "../images/frog/f-shock-resting.svg";
 import AvShock1 from "../images/frog/f-shock-open-1.svg";
 import AvShock2 from "../images/frog/f-shock-open-2.svg";
 
-import { Effect } from "windups";
+import { Effect, OnChar } from "windups";
 
 export const normFrames = [AvNormResting, AvNorm1, AvNorm2];
 export const normRestingFrames = [AvNormResting];
@@ -42,7 +42,7 @@ type SetExpressionProps = {
 
 const SetExpression: React.FC<SetExpressionProps> = ({
   expression,
-  resting,
+  resting
 }) => {
   const { setExpression } = useContext(FrogContext);
   const { setAvatarFrames } = useContext(PerformerContext);
@@ -96,7 +96,7 @@ const frogFrameSets: FrogFrameMap = {
   MAD: madFrames,
   SMUG: smugFrames,
   SHAME: shameFrames,
-  SHOCK: shockFrames,
+  SHOCK: shockFrames
 };
 
 const frogRestingFrameSets: FrogFrameMap = {
@@ -105,7 +105,7 @@ const frogRestingFrameSets: FrogFrameMap = {
   MAD: madRestingFrames,
   SMUG: smugFrames,
   SHAME: shameRestingFrames,
-  SHOCK: shockRestingFrames,
+  SHOCK: shockRestingFrames
 };
 
 type FrogEmotion = keyof FrogFrameMap;
@@ -119,13 +119,13 @@ const FrogContext = createContext<{
   currentExpression: FrogEmotion;
 }>({
   setExpression: () => {},
-  currentExpression: "NORMAL",
+  currentExpression: "NORMAL"
 });
 
 const Frog: React.FC<FrogProps> = ({
   children,
   autoProceed,
-  expression: initialExpression = "NORMAL",
+  expression: initialExpression = "NORMAL"
 }) => {
   const [currentExpression, setCurrentExpression] = useState(initialExpression);
 
@@ -135,7 +135,6 @@ const Frog: React.FC<FrogProps> = ({
     >
       <Performer
         initialFrames={frogFrameSets[initialExpression]}
-        endFrame={frogRestingFrameSets[initialExpression][0]}
         autoProceed={autoProceed}
       >
         <SetExpression expression={initialExpression} />

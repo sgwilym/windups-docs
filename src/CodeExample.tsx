@@ -1,9 +1,13 @@
 import React, { useContext } from "react";
-import { DialogChildContext } from "./Dialog";
-import { WindupChildren, Pace } from "windups";
-import { css } from "linaria";
+import { DialogChildContext, DialogContext } from "./Dialog";
+import { textFromChildren, useWindupString } from "windups";
+import { css, cx } from "linaria";
 import { GREEN } from "./colours";
-import { NextListener } from "./DialogElement";
+import Highlight, { defaultProps } from "prism-react-renderer";
+import theme from "prism-react-renderer/themes/nightOwl";
+import useKey from "@rooks/use-key";
+import SectionFocusContext from "./SectionFocusContext";
+import { SectionContext } from "./Section";
 
 const rootStyle = css`
   font: 16px "Menlo", monospace;
@@ -23,31 +27,54 @@ function randomInt(max: number) {
   return Math.floor(Math.random() * Math.floor(max));
 }
 
-const CodeExample: React.FC = ({ children }) => {
-  const { proceed } = useContext(DialogChildContext);
+type CodeExampleProps = {
+  children: string;
+};
+
+const CodeExample: React.FC<CodeExampleProps> = ({ children }) => {
+  const { proceed, isActive } = useContext(DialogChildContext);
+  const { isFinished: dialogIsFinished } = useContext(DialogContext);
+  const { activeSectionID } = useContext(SectionFocusContext);
+  const { id } = useContext(SectionContext);
+  const isTotallyActive = isActive && activeSectionID === id;
+  const [windup, { skip, isFinished }] = useWindupString(children, {
+    onFinished: () => {
+      setTimeout(() => {
+        proceed();
+      }, 500);
+    },
+    pace: (char) => {
+      if (char === "\n") {
+        return 200;
+      }
+      return randomInt(80);
+    },
+  });
+
+  useKey([13, 39], () => {
+    if (isTotallyActive && !isFinished) {
+      skip();
+    } else {
+      if (isTotallyActive && !dialogIsFinished) {
+        proceed();
+      }
+    }
+  });
 
   return (
-    <div className={rootStyle}>
-      <WindupChildren
-        onFinished={() => {
-          setTimeout(() => {
-            proceed();
-          }, 500);
-        }}
-      >
-        <NextListener />
-        <Pace
-          getPace={char => {
-            if (char === "\n") {
-              return 200;
-            }
-            return randomInt(80);
-          }}
-        >
-          {children}
-        </Pace>
-      </WindupChildren>
-    </div>
+    <Highlight {...defaultProps} theme={theme} code={windup} language={"tsx"}>
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre className={cx(className, rootStyle)} style={style}>
+          {tokens.map((line, i) => (
+            <div {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                <span {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
   );
 };
 

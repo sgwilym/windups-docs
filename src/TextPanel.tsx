@@ -5,7 +5,9 @@ import useSize from "@rehooks/component-size";
 import { CHAR_FONT_STYLE, StandardChar, CharContext } from "./Char";
 import RewindListener from "./RewindListener";
 
-const rootStyle = css``;
+const rootStyle = css`
+  line-height: 1.5em;
+`;
 
 const TextPanel: React.FC = ({ children }) => {
   const panelRef = useRef(null);

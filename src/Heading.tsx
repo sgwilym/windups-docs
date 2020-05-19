@@ -73,7 +73,7 @@ const staticHeadingLetterStyle = css`
   display: inline-block;
 `;
 
-const HeadingChar: React.FC = ({ children }) => {
+export const HeadingChar: React.FC = ({ children }) => {
   return (
     <span aria-hidden={true} className={headingLetterStyle}>
       {children}
@@ -99,7 +99,7 @@ const Heading: React.FC<HeadingProps> = ({
   children,
   onFinished,
   right,
-  noWindup
+  noWindup,
 }) => {
   const text = textFromChildren(children);
 

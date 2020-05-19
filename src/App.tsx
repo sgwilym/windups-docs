@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { css, cx } from "linaria";
 import Chat from "./content/Chat";
 import Heading from "./Heading";
@@ -12,7 +12,7 @@ import {
 } from "react-router-dom";
 import { GREY, TEXT_PINK, GREEN } from "./colours";
 import { useInView } from "react-intersection-observer";
-import PointerHand from "./point.svg";
+import PointerHand from "./images/point.svg";
 import useInternetTime from "use-internet-time";
 import QuickStart from "./content/QuickStart";
 import Guides from "./content/Guides";
@@ -24,8 +24,12 @@ import KeyboardIcon from "./images/keyboard-menu.svg";
 import Megayaki from "./images/mega-yaki.svg";
 import SnowmanKebab from "./images/snowman-kebab.svg";
 import RufflePizza from "./images/ruffle-pizza.svg";
-import { useWindupString, CharWrapper } from "windups";
+import { useWindupString, CharWrapper, Pause } from "windups";
 import Cutlery from "./images/forks.svg";
+import useComponentSize from "@rehooks/component-size";
+import Frog from "./performers/Frog";
+import Dialog from "./Dialog";
+import SectionFocusContext from "./SectionFocusContext";
 
 type SectionProps = {
   title: string;
@@ -287,21 +291,64 @@ const AttentionScreen: React.FC = () => {
   return (
     <Screen>
       <div ref={wasInViewRef}>
-        {wasInView && <Section title={"Call attention!"} right></Section>}
+        {wasInView && (
+          <Section title={"Call attention!"} right>
+            <div className={menuStyle}>
+              <div className={pizzaRowStyle}>
+                <MenuItem name={"Mega-Yaki"} img={Megayaki} price={500} />
+              </div>
+              <div className={secondRowStyle}>
+                <MenuItem
+                  name={"Ruffle Pizza"}
+                  img={RufflePizza}
+                  price={400}
+                  discountedPrice={200}
+                />
+                <MenuItem
+                  name={"Snowman Kebab"}
+                  img={SnowmanKebab}
+                  price={300}
+                />
+              </div>
+            </div>
+          </Section>
+        )}
       </div>
-      <div className={menuStyle}>
-        <div className={pizzaRowStyle}>
-          <MenuItem name={"Mega-Yaki"} img={Megayaki} price={500} />
-        </div>
-        <div className={secondRowStyle}>
-          <MenuItem
-            name={"Ruffle Pizza"}
-            img={RufflePizza}
-            price={400}
-            discountedPrice={200}
-          />
-          <MenuItem name={"Snowman Kebab"} img={SnowmanKebab} price={300} />
-        </div>
+    </Screen>
+  );
+};
+
+const LearnScreen: React.FC = () => {
+  const [wasInViewRef, wasInView] = useWasInView();
+
+  return (
+    <Screen>
+      <div ref={wasInViewRef}>
+        {wasInView && (
+          <SectionFocusContext.Provider
+            value={{ activeSectionID: "", setActiveSectionID: () => {} }}
+          >
+            <Section title={"Let this frog be your guide!"}>
+              <Dialog>
+                <Frog>
+                  {"Yup."}
+                  <Pause ms={500} />
+                  {"That'll be me."}
+                  <Pause ms={500} />
+                  {"Folks call me..."}
+                  <Pause ms={500} />
+                  {"frog."}
+                </Frog>
+                <Frog>
+                  {
+                    "Yeah yeah. I know. ‟They're going to make a frog teach me about this over-engineered typewriter effect?”"
+                  }
+                </Frog>
+                <Frog>{"Now that ain't nice. "}</Frog>
+              </Dialog>
+            </Section>
+          </SectionFocusContext.Provider>
+        )}
       </div>
     </Screen>
   );
@@ -373,9 +420,22 @@ const gridStyles = css`
   background: #eeeeee;
 `;
 
+const mobileGridStyles = css`
+  display: grid;
+  grid-template-columns: 0fr repeat(7, 1fr) 0fr;
+  column-gap: 8px;
+  background: #eeeeee;
+`;
+
 const subgridStyles = css`
   display: grid;
   grid-template-columns: repeat(7, 96px);
+  column-gap: 8px;
+`;
+
+const mobileSubGridStyle = css`
+  display: grid;
+  grid-template-columns: 0fr repeat(6, 1fr);
   column-gap: 8px;
 `;
 
@@ -384,11 +444,29 @@ const indentStyle = css`
 `;
 
 const Grid: React.FC = ({ children }) => {
-  return <div className={gridStyles}>{children}</div>;
+  const gridRef = useRef(null);
+  const { width } = useComponentSize(gridRef);
+
+  const style = width <= 672 ? mobileGridStyles : gridStyles;
+
+  return (
+    <div ref={gridRef} className={style}>
+      {children}
+    </div>
+  );
 };
 
 export const SubGrid: React.FC = ({ children }) => {
-  return <div className={subgridStyles}>{children}</div>;
+  const gridRef = useRef(null);
+  const { width } = useComponentSize(gridRef);
+
+  const style = width <= 672 ? mobileSubGridStyle : subgridStyles;
+
+  return (
+    <div ref={gridRef} className={style}>
+      {children}
+    </div>
+  );
 };
 
 export const Indent1: React.FC = ({ children }) => (
@@ -472,6 +550,7 @@ const App: React.FC = () => {
           <Route exact path={"/"}>
             <IntroScreen />
             <AttentionScreen />
+            <LearnScreen />
           </Route>
           <Route exact path={"/guides"}>
             <Guides />

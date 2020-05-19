@@ -1,7 +1,8 @@
-import React from "react";
-import { useWindupString, CharWrapper } from "windups";
+import React, { useRef } from "react";
+import { CharWrapper, WindupChildren, Linebreaker } from "windups";
 import { css } from "linaria";
 import { GREEN, PINK } from "../colours";
+import useComponentSize from "@rehooks/component-size";
 
 const chatChar = css`
   @keyframes enter {
@@ -26,7 +27,6 @@ const SpeechBubbleChar: React.FC = ({ children }) => {
 type SpeechBubbleProps = {
   text: string;
   onFinished?: () => void;
-  skipped?: boolean;
 };
 
 const greenBubble = css`
@@ -46,17 +46,19 @@ const greenBubble = css`
 export const SpeechBubbleA: React.FC<SpeechBubbleProps> = ({
   text,
   onFinished,
-  skipped,
 }) => {
-  const [windup] = useWindupString(text, { onFinished, skipped });
+  const ref = useRef(null);
+  const { width } = useComponentSize(ref);
 
   return (
-    <div className={greenBubble}>
-      {skipped ? (
-        windup
-      ) : (
-        <CharWrapper element={SpeechBubbleChar}>{windup}</CharWrapper>
-      )}
+    <div className={rootStyle} ref={ref}>
+      <Linebreaker width={width} fontStyle={'24px "Menlo", monospace'}>
+        <WindupChildren onFinished={onFinished}>
+          <div className={greenBubble}>
+            <CharWrapper element={SpeechBubbleChar}>{text}</CharWrapper>
+          </div>
+        </WindupChildren>
+      </Linebreaker>
     </div>
   );
 };
@@ -75,21 +77,28 @@ const pinkBubble = css`
   box-shadow: -2px 2px 7px rgba(0, 0, 0, 0.05);
 `;
 
+const rootStyle = css`
+  display: flex;
+  flex-direction: column;
+`;
+
 export const SpeechBubbleB: React.FC<SpeechBubbleProps> = ({
   text,
   onFinished,
-  skipped,
 }) => {
-  const [windup] = useWindupString(text, { onFinished, skipped });
+  const ref = useRef(null);
+  const { width } = useComponentSize(ref);
 
   return (
-    <div key={skipped ? "skipped" : "unskipped"} className={pinkBubble}>
-      {skipped ? (
-        windup
-      ) : (
-        <CharWrapper element={SpeechBubbleChar}>{windup}</CharWrapper>
-      )}
-    </div>
+    <Linebreaker width={width} fontStyle={'24px "Menlo", monospace'}>
+      <div className={rootStyle} ref={ref}>
+        <WindupChildren onFinished={onFinished}>
+          <div className={pinkBubble}>
+            <CharWrapper element={SpeechBubbleChar}>{text}</CharWrapper>
+          </div>
+        </WindupChildren>
+      </div>
+    </Linebreaker>
   );
 };
 

@@ -1,10 +1,10 @@
 import React from "react";
 import { useWindupString } from "windups";
 import { cx, css } from "linaria";
-import KeyA from "./key1.svg";
-import KeyB from "./key2.svg";
-import KeyC from "./key3.svg";
-import KeyD from "./key4.svg";
+import KeyA from "./images/key-a.svg";
+import KeyB from "./images/key-b.svg";
+import KeyC from "./images/key-c.svg";
+import KeyD from "./images/key-d.svg";
 
 const keyRootStyle = css`
   width: 76px;
@@ -19,11 +19,11 @@ type KeyProps = {
 
 const Key: React.FC<KeyProps> = ({ changeValue }) => {
   const [[src], next] = React.useReducer(
-    state => {
+    (state) => {
       const [first, ...rest] = state;
       return [...rest, first];
     },
-    [KeyB, KeyA, KeyC, KeyD]
+    [KeyD, KeyA, KeyB, KeyC]
   );
 
   React.useEffect(() => {
@@ -80,15 +80,15 @@ const Banner: React.FC<BannerProps> = ({ onFinished }) => {
   const [text] = useWindupString("windups", {
     pace: () => 150,
     onChar: () => {
-      setCount(prev => prev + 1);
+      setCount((prev) => prev + 1);
     },
     onFinished: () => {
       setTimeout(() => {
-        setCount(prev => prev + 1);
+        setCount((prev) => prev + 1);
         onFinished();
         setIsFinished(true);
       }, 300);
-    }
+    },
   });
 
   return (

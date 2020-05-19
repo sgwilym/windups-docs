@@ -1,15 +1,7 @@
 import React from "react";
 import Section from "../Section";
 import Dialog from "../Dialog";
-import Frog, {
-  HappyExpression,
-  laffFrames,
-  laffRestingFrames,
-  madFrames,
-  madRestingFrames,
-  smugFrames,
-  smugRestingFrames,
-} from "../performers/Frog";
+import Frog from "../performers/Frog";
 import { Pace, Pause } from "windups";
 import SmashEffect from "../SmashEffect";
 import { Emphasis, Dropped } from "../Char";
@@ -53,7 +45,7 @@ const GuidesHelp: React.FC = () => {
             <Dropped>{"But why would you want to do that?"}</Dropped>
           </Pace>
         </Frog>
-        <Frog autoProceed expression={"HAPPY"}>
+        <Frog autoProceed expression={"SHAME"}>
           <SmashEffect />
           {"All right, I was just havin' some fun."}
           <Pause ms={500} />

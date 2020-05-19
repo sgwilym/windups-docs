@@ -6,7 +6,8 @@ import { useIsFinished, useSkip, Effect } from "windups";
 import { SectionContext } from "./Section";
 import SectionFocusContext from "./SectionFocusContext";
 import { css } from "linaria";
-import Nexters from "./nexters.svg";
+import Nexters from "./images/nexters.svg";
+import { GREEN } from "./colours";
 
 export const NextListener: React.FC = () => {
   const isFinished = useIsFinished();
@@ -48,19 +49,20 @@ const nextRootStyles = css`
   animation-duration: 5s, 200ms;
   animation-iteration-count: infinite, 1;
   animation-timing-function: linear;
-
   display: block;
-  width: 100%;
   height: 48px;
   border-radius: 5px;
   border: 2px solid #e5e5e5;
   background-image: url(${Nexters});
+  background-color: white;
+  width: 100%;
   background-size: 111px 73px;
   font-size: 1em;
   font-family: "Menlo", monospace;
   margin-top: 16px;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
   transition: transform 200ms;
+  appearance: none;
 
   &:hover {
     transform: scale(1.02);
@@ -68,6 +70,11 @@ const nextRootStyles = css`
 
   &:active {
     transform: scale(0.98);
+  }
+
+  &:focus {
+    color: ${GREEN};
+    border-color: ${GREEN};
   }
 `;
 

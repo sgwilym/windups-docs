@@ -3,23 +3,30 @@ import { css, cx } from "linaria";
 import SectionFocusContext from "./SectionFocusContext";
 import { SubGrid, Indent1 } from "./App";
 import { GREEN } from "./colours";
+import { useWindupString, CharWrapper } from "windups";
+import { useLocation } from "react-router";
+import { HeadingChar } from "./Heading";
 
 const dialogRoot = css`
   margin: 1em 0 10em 0;
 `;
 
 const headingRootStyle = css`
-  grid-column: 2/9;
+  grid-column: 2/8;
   display: flex;
   align-items: center;
   padding: 0;
   border: none;
   font-size: 1em;
+  height: 48px;
   border-bottom: 2px solid black;
   padding: 0 0 8px 0;
   margin: 0 0 1em 0;
   background: none;
   justify-content: space-between;
+  &:focus {
+    color: ${GREEN};
+  }
 `;
 
 const activeHeadingStyle = css`
@@ -32,6 +39,8 @@ const headingStyle = css`
   font-weight: normal;
   font-style: italic;
   margin: 0 0 0 0.3em;
+  text-align: left;
+  white-space: pre;
 `;
 
 const playButtonStyle = css`
@@ -43,11 +52,12 @@ const playButtonStyle = css`
   border-radius: 50%;
   padding: 2px 0 0 2px
   text-align: center;
+  box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
 `;
 
 export const SectionContext = React.createContext({
   id: "",
-  isActive: false,
+  isActive: true
 });
 
 type SectionProps = {
@@ -56,16 +66,29 @@ type SectionProps = {
   alt?: boolean;
 };
 
+const SectionHeading: React.FC<{ id: string; title: string }> = ({
+  title,
+  id
+}) => {
+  const { hash } = useLocation();
+  const isHashLinked = hash === `#${id}`;
+  const [titleWindup] = useWindupString(title, { skipped: !isHashLinked });
+
+  return (
+    <h3 className={headingStyle}>
+      <CharWrapper element={isHashLinked ? HeadingChar : React.Fragment}>
+        {titleWindup}
+      </CharWrapper>
+    </h3>
+  );
+};
+
 const Section: React.FC<SectionProps> = ({ id, title, children, alt }) => {
   const [pressedPlay, setPressedPlay] = useState(false);
   const { setActiveSectionID, activeSectionID } = useContext(
     SectionFocusContext
   );
   const isActive = activeSectionID === id;
-
-  const SectionHeading = () => {
-    return <h3 className={headingStyle}>{title}</h3>;
-  };
 
   return (
     <SectionContext.Provider value={{ id, isActive }}>
@@ -79,8 +102,12 @@ const Section: React.FC<SectionProps> = ({ id, title, children, alt }) => {
             }
           }}
         >
-          <SectionHeading />
-          {!pressedPlay && <div className={playButtonStyle}>{"▶"}</div>}
+          <SectionHeading title={title} id={id} />
+          {!pressedPlay && (
+            <div aria-hidden className={playButtonStyle}>
+              {"▶"}
+            </div>
+          )}
         </button>
         <div id={id} />
         {pressedPlay && (

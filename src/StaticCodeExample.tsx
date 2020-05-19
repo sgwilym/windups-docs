@@ -1,6 +1,9 @@
 import React from "react";
-import { css } from "linaria";
+import { css, cx } from "linaria";
 import { LIGHT_GREY } from "./colours";
+import Highlight, { defaultProps } from "prism-react-renderer";
+import theme from "prism-react-renderer/themes/nightOwlLight";
+import { textFromChildren } from "windups";
 
 const rootStyle = css`
   font: 14px "Menlo", monospace;
@@ -15,7 +18,23 @@ const rootStyle = css`
 `;
 
 const StaticCodeExample: React.FC = ({ children }) => {
-  return <div className={rootStyle}>{children}</div>;
+  const text = textFromChildren(children);
+
+  return (
+    <Highlight {...defaultProps} theme={theme} code={text} language={"tsx"}>
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre className={cx(className, rootStyle)} style={style}>
+          {tokens.map((line, i) => (
+            <div {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                <span {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
+  );
 };
 
 export default StaticCodeExample;
