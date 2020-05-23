@@ -1,10 +1,10 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import DialogElement, { DialogElementProps } from "./DialogElement";
 import { css, cx } from "linaria";
 import { DialogChildContext } from "./Dialog";
 import { SectionContext } from "./Section";
 import { useDebounce } from "use-debounce";
-import { OnChar, Effect, textFromChildren } from "windups";
+import { OnChar, textFromChildren, Effect } from "windups";
 import VisuallyHidden from "@reach/visually-hidden";
 
 const rootStyle = css`
@@ -24,7 +24,7 @@ const inactiveStyle = css`
 `;
 
 export const PerformerContext = React.createContext({
-  setAvatarFrames: (_frames: string[]) => {}
+  setAvatarFrames: (_frames: FrameSet) => {}
 });
 
 type AvatorProps = {
@@ -32,7 +32,7 @@ type AvatorProps = {
 };
 
 const Avatar: React.FC<AvatorProps> = ({ currentAvatar }) => {
-  const [debouncedAvatar] = useDebounce(currentAvatar, 27, { maxWait: 40 });
+  const [debouncedAvatar] = useDebounce(currentAvatar, 30, { maxWait: 40 });
 
   return <img src={debouncedAvatar} alt={"Character avatar"} aria-hidden />;
 };
@@ -43,39 +43,63 @@ type Action =
       fromChar?: (char: string) => void;
     }
   | {
-      type: "newFrames";
-      frames: string[];
+      type: "newFrameSet";
+      frameSet: FrameSet;
     };
 
-function avatarReducer(state: string[], action: Action) {
+function cycleFrames(frames: string[]) {
+  const [head, ...tail] = frames;
+  return [...tail, head];
+}
+
+function avatarReducer(state: FrameSet, action: Action) {
   switch (action.type) {
-    case "newFrames":
-      return action.frames;
+    case "newFrameSet":
+      return action.frameSet;
     default:
-      const [head, ...tail] = state;
-      return [...tail, head];
+      return {
+        normal: cycleFrames(state.normal),
+        resting: cycleFrames(state.resting)
+      };
   }
 }
 
+function getIsResting(char: string) {
+  switch (char) {
+    case ".":
+    case " ":
+      return true;
+    default:
+      return false;
+  }
+}
+
+export type FrameSet = {
+  normal: string[];
+  resting: string[];
+};
+
 interface PerformerProps extends DialogElementProps {
-  initialFrames: string[];
+  initialFrameSet: FrameSet;
 }
 
 const Performer: React.FC<PerformerProps> = ({
   children,
   autoProceed,
-  initialFrames
+  initialFrameSet
 }) => {
   const { isActive: sectionIsActive } = useContext(SectionContext);
   const { isActive } = useContext(DialogChildContext);
-  const [frames, dispatch] = useReducer(avatarReducer, initialFrames);
+  const [frameSet, dispatch] = useReducer(avatarReducer, initialFrameSet);
   const text = textFromChildren(children);
+  const [isResting, setIsResting] = useState(false);
+  const frames = isResting ? frameSet.resting : frameSet.normal;
 
   return (
     <PerformerContext.Provider
       value={{
-        setAvatarFrames: newFrames => {
-          dispatch({ type: "newFrames", frames: newFrames });
+        setAvatarFrames: newFrameSet => {
+          dispatch({ type: "newFrameSet", frameSet: newFrameSet });
         }
       }}
     >
@@ -90,12 +114,18 @@ const Performer: React.FC<PerformerProps> = ({
           <VisuallyHidden>{text}</VisuallyHidden>
           <DialogElement autoProceed={autoProceed}>
             <OnChar
-              fn={() => {
+              fn={(char: string) => {
+                setIsResting(getIsResting(char));
                 dispatch({ type: "next" });
               }}
             >
               {children}
             </OnChar>
+            <Effect
+              fn={() => {
+                setIsResting(true);
+              }}
+            />
           </DialogElement>
         </div>
       </div>

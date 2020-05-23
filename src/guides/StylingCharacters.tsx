@@ -160,7 +160,7 @@ const StylingCharacters: React.FC = () => {
         <Frog>
           <Emphasis>{"Flair."}</Emphasis>
         </Frog>
-        <Frog>
+        <Frog expression={"COOL"}>
           <Pace ms={120}>
             <Emphasis>{"Styyyyyyle."}</Emphasis>
           </Pace>

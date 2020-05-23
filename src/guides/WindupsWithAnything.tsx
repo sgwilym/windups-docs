@@ -5,6 +5,7 @@ import Frog, { HappyExpression } from "../performers/Frog";
 import CodeExample from "../CodeExample";
 import Example from "../Example";
 import { WindupChildren } from "windups";
+import Auntie from "../images/auntie.svg";
 
 const PIC_EXAMPLE = `import React from "react";
 import { WindupComponent } from "windups";
@@ -52,7 +53,7 @@ const AuntieWindup = () => {
   return (
     <WindupChildren onFinished={proceed}>
       <div>{"My dear auntie"}</div>
-      <img src={"auntie.jpg"} />
+      <img src={Auntie} />
       <div>{"The world's kindest frog"}</div>
     </WindupChildren>
   );

@@ -3,6 +3,7 @@ import { LinkProps } from "react-router-dom";
 import { css, cx } from "linaria";
 import { TEXT_PINK, GREEN } from "./colours";
 import { HashLink as Link } from "react-router-hash-link";
+import LittleHand from "./images/little-hand.svg";
 
 const rootStyle = css`
   font-family: Menlo, monospace;
@@ -15,9 +16,18 @@ const rootStyle = css`
 
   transition: all 200ms;
   color: white;
+  position: relative;
 
   &:hover {
     background: white;
+  }
+
+  &:hover:before {
+    content: url(${LittleHand});
+    position: absolute;
+
+    top: 50%;
+    transform: translate(-110%, -45%);
   }
 
   img {
@@ -29,6 +39,14 @@ const rootStyle = css`
 
   &:hover img {
     filter: none;
+  }
+`;
+
+const blackStyle = css`
+  background: black;
+
+  &:hover {
+    color: black;
   }
 `;
 
@@ -50,23 +68,27 @@ const pinkStyle = css`
 
 const innerStyle = css`
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 `;
 
+const themeStyles = {
+  PINK: pinkStyle,
+  GREEN: greenStyle,
+  BLACK: blackStyle
+};
+
 type BlockLinkProps = {
-  theme?: "PINK" | "GREEN";
+  theme?: "PINK" | "GREEN" | "BLACK";
 } & LinkProps;
 
 const BlockLink: React.FC<BlockLinkProps> = ({
   children,
   theme = "PINK",
+  className,
   ...rest
 }) => {
   return (
-    <Link
-      className={cx(rootStyle, theme === "GREEN" ? greenStyle : pinkStyle)}
-      {...rest}
-    >
+    <Link className={cx(className, rootStyle, themeStyles[theme])} {...rest}>
       <div className={innerStyle}>{children}</div>
     </Link>
   );

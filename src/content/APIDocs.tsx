@@ -106,7 +106,7 @@ const Doc: React.FC<DocProps> = ({
                 <Subheading>{"Guides"}</Subheading>
                 {guides.map(guide => (
                   <BlockLink
-                    to={`/guides/${guide.path}`}
+                    to={`${guide.path}`}
                     key={guide.path}
                     theme={"GREEN"}
                   >
@@ -253,7 +253,7 @@ const docs: DocProps[] = [
     ],
     guides: [
       {
-        name: "Getting timing right",
+        name: "Pacing your windups",
         path: "/guides#timing"
       }
     ]
@@ -314,7 +314,7 @@ const docs: DocProps[] = [
     ],
     guides: [
       {
-        name: "Getting timing right",
+        name: "Pacing your windups",
         path: "/guides#timing"
       }
     ]
@@ -487,6 +487,7 @@ const MySkippableWindup = () => {
   },
   {
     id: "text-from-children",
+    guides: [{ path: "/guides#a11y", name: "Accessibility" }],
     sig: "(children: React.ReactNode) => string",
     title: "textFromChildren",
     shortDesc:

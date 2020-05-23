@@ -11350,9 +11350,12 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-"windups@link:../windups/pkg":
-  version "0.0.0"
-  uid ""
+windups@windups@1.0.0-beta.1:
+  version "1.0.0-beta.1"
+  resolved "https://registry.yarnpkg.com/windups/-/windups-1.0.0-beta.1.tgz#641631216c8a0e244c6691814d8abde10c3599e2"
+  integrity sha512-2Wq1JAFDYnNgzAWozLEL1geS0hWmNKDlWC0/q/kjC1oXGx0xL5P02FecJ3qUaByn4g1bw8QfdJWg0Q9QsfVyhA==
+  dependencies:
+    break-styled-lines "^1.1.1"
 
 word-wrap@~1.2.3:
   version "1.2.3"

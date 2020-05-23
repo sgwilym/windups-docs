@@ -60,7 +60,7 @@ const StyledExample = () => {
 
 const GuideName = () => {
   return (
-    <Section id={"styling-segments"} title={"Styling text segments"}>
+    <Section id={"styling-text-segments"} title={"Styling text segments"}>
       <Dialog>
         <Frog>{"Take a look at this."}</Frog>
         <CodeExample>{UNSTYLED_EXAMPLE}</CodeExample>

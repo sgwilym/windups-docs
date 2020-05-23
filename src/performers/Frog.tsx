@@ -19,53 +19,40 @@ import AvShame2 from "../images/frog/f-shame-open-2.svg";
 import AvShockResting from "../images/frog/f-shock-resting.svg";
 import AvShock1 from "../images/frog/f-shock-open-1.svg";
 import AvShock2 from "../images/frog/f-shock-open-2.svg";
+import AvCoolResting from "../images/frog/f-cool-resting.svg";
+import AvCool1 from "../images/frog/f-cool-open-1.svg";
+import AvCool2 from "../images/frog/f-cool-open-2.svg";
+import { FrameSet } from "../Performer";
 
-import { Effect, OnChar } from "windups";
+import { Effect } from "windups";
 
-export const normFrames = [AvNormResting, AvNorm1, AvNorm2];
-export const normRestingFrames = [AvNormResting];
-export const laffFrames = [AvLaffResting, AvLaff1, AvLaff2];
-export const laffRestingFrames = [AvLaffResting];
-export const madFrames = [AvMadResting, AvMad1, AvMad2];
-export const madRestingFrames = [AvMadResting];
-export const smugFrames = [AvSmugResting, AvSmug1, AvSmug2];
-export const smugRestingFrames = [AvSmugResting];
-export const shameFrames = [AvShameResting, AvShame1, AvShame2];
-export const shameRestingFrames = [AvShameResting];
-export const shockFrames = [AvShockResting, AvShock1, AvShock2];
-export const shockRestingFrames = [AvShockResting];
+const normFrames = [AvNorm1, AvNorm2];
+const normRestingFrames = [AvNormResting];
+const laffFrames = [AvLaff1, AvLaff2];
+const laffRestingFrames = [AvLaffResting];
+const madFrames = [AvMad1, AvMad2];
+const madRestingFrames = [AvMadResting];
+const smugFrames = [AvSmug1, AvSmug2];
+const smugRestingFrames = [AvSmugResting];
+const shameFrames = [AvShame1, AvShame2];
+const shameRestingFrames = [AvShameResting];
+const shockFrames = [AvShock1, AvShock2];
+const shockRestingFrames = [AvShockResting];
+const coolFrames = [AvCool1, AvCool2];
+const coolRestingFrames = [AvCoolResting];
 
 type SetExpressionProps = {
   expression: FrogEmotion;
-  resting?: boolean;
 };
 
-const SetExpression: React.FC<SetExpressionProps> = ({
-  expression,
-  resting
-}) => {
+const SetExpression: React.FC<SetExpressionProps> = ({ expression }) => {
   const { setExpression } = useContext(FrogContext);
   const { setAvatarFrames } = useContext(PerformerContext);
   return (
     <Effect
       fn={() => {
         setExpression(expression);
-        setAvatarFrames(
-          resting ? frogRestingFrameSets[expression] : frogFrameSets[expression]
-        );
-      }}
-    />
-  );
-};
-
-const SetRestingCurrentExpression = () => {
-  const { setExpression, currentExpression } = useContext(FrogContext);
-  const { setAvatarFrames } = useContext(PerformerContext);
-  return (
-    <Effect
-      fn={() => {
-        setExpression(currentExpression);
-        setAvatarFrames(frogRestingFrameSets[currentExpression]);
+        setAvatarFrames(frogFrameSets[expression]);
       }}
     />
   );
@@ -81,34 +68,26 @@ export const ShameExpression = makeExpression("SHAME");
 export const ShockExpression = makeExpression("SHOCK");
 export const MadExpression = makeExpression("MAD");
 
-type FrogFrameMap = {
-  NORMAL: string[];
-  HAPPY: string[];
-  MAD: string[];
-  SMUG: string[];
-  SHAME: string[];
-  SHOCK: string[];
-};
+type FrogEmotion =
+  | "NORMAL"
+  | "HAPPY"
+  | "MAD"
+  | "SMUG"
+  | "SHAME"
+  | "SHOCK"
+  | "COOL";
+
+type FrogFrameMap = Record<FrogEmotion, FrameSet>;
 
 const frogFrameSets: FrogFrameMap = {
-  NORMAL: normFrames,
-  HAPPY: laffFrames,
-  MAD: madFrames,
-  SMUG: smugFrames,
-  SHAME: shameFrames,
-  SHOCK: shockFrames
+  NORMAL: { normal: normFrames, resting: normRestingFrames },
+  HAPPY: { normal: laffFrames, resting: laffRestingFrames },
+  MAD: { normal: madFrames, resting: madRestingFrames },
+  SMUG: { normal: smugFrames, resting: smugRestingFrames },
+  SHAME: { normal: shameFrames, resting: shameRestingFrames },
+  SHOCK: { normal: shockFrames, resting: shockFrames },
+  COOL: { normal: coolFrames, resting: coolRestingFrames }
 };
-
-const frogRestingFrameSets: FrogFrameMap = {
-  NORMAL: normRestingFrames,
-  HAPPY: laffRestingFrames,
-  MAD: madRestingFrames,
-  SMUG: smugFrames,
-  SHAME: shameRestingFrames,
-  SHOCK: shockRestingFrames
-};
-
-type FrogEmotion = keyof FrogFrameMap;
 
 interface FrogProps extends DialogElementProps {
   expression?: FrogEmotion;
@@ -134,12 +113,11 @@ const Frog: React.FC<FrogProps> = ({
       value={{ setExpression: setCurrentExpression, currentExpression }}
     >
       <Performer
-        initialFrames={frogFrameSets[initialExpression]}
+        initialFrameSet={frogFrameSets[initialExpression]}
         autoProceed={autoProceed}
       >
         <SetExpression expression={initialExpression} />
         {children}
-        <SetRestingCurrentExpression />
       </Performer>
     </FrogContext.Provider>
   );

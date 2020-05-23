@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { css, cx } from "linaria";
 import Chat from "./content/Chat";
 import Heading from "./Heading";
@@ -10,9 +10,8 @@ import {
   NavLinkProps,
   useLocation
 } from "react-router-dom";
-import { GREY, TEXT_PINK, GREEN } from "./colours";
+import { GREY, TEXT_PINK, GREEN, PINK } from "./colours";
 import { useInView } from "react-intersection-observer";
-import PointerHand from "./images/point.svg";
 import useInternetTime from "use-internet-time";
 import QuickStart from "./content/QuickStart";
 import Guides from "./content/Guides";
@@ -27,9 +26,11 @@ import RufflePizza from "./images/ruffle-pizza.svg";
 import { useWindupString, CharWrapper, Pause } from "windups";
 import Cutlery from "./images/forks.svg";
 import useComponentSize from "@rehooks/component-size";
-import Frog from "./performers/Frog";
+import Frog, { HappyExpression } from "./performers/Frog";
 import Dialog from "./Dialog";
 import SectionFocusContext from "./SectionFocusContext";
+import BlockLink from "./BlockLink";
+import { NextButton } from "./DialogElement";
 
 type SectionProps = {
   title: string;
@@ -64,12 +65,26 @@ const Section: React.FC<SectionProps> = ({ title, children, right }) => {
 
 const contentStyle = css`
   grid-column: 2/9;
-  margin: 72px 0;
+  margin: 72px 0 0 0;
   transform: translateZ(0);
+`;
+
+const footerStyle = css`
+  font-family: "Menlo", monospace;
+  text-align: center;
+  padding-bottom: 36px;
+  grid-column: 2/9;
+
+  a {
+    color: black;
+    text-decoration-thickness: 2px;
+    text-decoration-color: ${TEXT_PINK};
+  }
 `;
 
 const navStyle = css`
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
+  height: 1.5em;
   position: sticky;
   top: 1em;
   background: ${GREY};
@@ -91,69 +106,42 @@ const activeLinkStyle = css`
   text-decoration-color: ${TEXT_PINK};
 `;
 
-const screenStyle = css`
-  min-height: 100vh;
+const landingSectionRoot = css`
+  margin: 0 0 5em 0;
 `;
 
-const Screen: React.FC = ({ children }) => {
-  return <div className={screenStyle}>{children}</div>;
+const LandingSection: React.FC = ({ children }) => {
+  return <section className={landingSectionRoot}>{children}</section>;
 };
 
-const pointingStyle = css`
-  @keyframes drift {
-    50% {
-      transform: translateY(-25%);
-    }
-  }
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  animation-name: drift, fadeIn;
-  animation-duration: 1s;
-  animation-iteration-count: infinite, 1;
-  animation-timing-function: ease-in-out;
-  text-align: center;
+const landingNextButtonStyles = css`
+  width: 20em;
+
+  margin: 3em auto 0;
 `;
 
-const pointerIntroStyle = css`
-  flex: 1 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Pointer: React.FC = () => {
+const LandingNextButton: React.FC = () => {
   return (
-    <div className={cx(pointingStyle)}>
-      <img src={PointerHand} alt={"A hand pointing down"} />
+    <div className={landingNextButtonStyles}>
+      <NextButton />
     </div>
   );
 };
 
-const IntroScreen = () => {
-  const [bannerFinished, setIsBannerFinished] = React.useState(false);
-  const [chatFinished, setChatFinished] = React.useState(false);
+const IntroScreen: React.FC = () => {
+  const [bannerFinished, setIsBannerFinished] = useState(false);
+  const [chatFinished, setIsChatFinished] = useState(false);
 
   return (
-    <Screen>
+    <LandingSection>
       <Banner onFinished={() => setIsBannerFinished(true)} />
       {bannerFinished && (
         <Section title={"Make text come alive!"}>
-          <Chat onFinished={() => setChatFinished(true)} />
+          <Chat onFinished={() => setIsChatFinished(true)} />
         </Section>
       )}
-
-      {chatFinished && (
-        <div className={pointerIntroStyle}>
-          <Pointer />
-        </div>
-      )}
-    </Screen>
+      {chatFinished && <LandingNextButton />}
+    </LandingSection>
   );
 };
 
@@ -208,12 +196,14 @@ const MenuItem: React.FC<{
   img: string;
   price: number;
   discountedPrice?: number;
-}> = ({ img, name, discountedPrice, price }) => {
+  onFinished?: () => void;
+}> = ({ img, name, discountedPrice, price, onFinished }) => {
   const [wasInViewRef, wasInView] = useWasInView();
   const [windup] = useWindupString(
     wasInView && discountedPrice ? `ƒ${discountedPrice}!` : "",
     {
-      pace: () => 450
+      pace: () => 450,
+      onFinished
     }
   );
 
@@ -256,10 +246,18 @@ const menuStyle = css`
       background-position: 150px 90px;
     }
   }
-  animation-name: drift;
-  animation-duration: 20s;
-  animation-iteration-count: infinite;
-  animation-timing-function: linear;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  animation-name: drift, fadeIn;
+  animation-duration: 20s, 1s;
+  animation-iteration-count: infinite, 1;
+  animation-timing-function: linear, ease-in-out;
   background-color: white;
   border: 3px solid black;
   padding: 16px;
@@ -286,71 +284,145 @@ function useWasInView(): [() => void, boolean] {
 }
 
 const AttentionScreen: React.FC = () => {
-  const [wasInViewRef, wasInView] = useWasInView();
+  const [isFinished, setIsFinished] = useState(false);
 
   return (
-    <Screen>
-      <div ref={wasInViewRef}>
-        {wasInView && (
-          <Section title={"Call attention!"} right>
-            <div className={menuStyle}>
-              <div className={pizzaRowStyle}>
-                <MenuItem name={"Mega-Yaki"} img={Megayaki} price={500} />
-              </div>
-              <div className={secondRowStyle}>
-                <MenuItem
-                  name={"Ruffle Pizza"}
-                  img={RufflePizza}
-                  price={400}
-                  discountedPrice={200}
-                />
-                <MenuItem
-                  name={"Snowman Kebab"}
-                  img={SnowmanKebab}
-                  price={300}
-                />
-              </div>
-            </div>
-          </Section>
-        )}
-      </div>
-    </Screen>
+    <LandingSection>
+      <Section title={"Call attention!"} right>
+        <div className={menuStyle}>
+          <div className={pizzaRowStyle}>
+            <MenuItem name={"Mega-Yaki"} img={Megayaki} price={500} />
+          </div>
+          <div className={secondRowStyle}>
+            <MenuItem
+              name={"Ruffle Pizza"}
+              img={RufflePizza}
+              price={400}
+              discountedPrice={200}
+              onFinished={() => setIsFinished(true)}
+            />
+            <MenuItem name={"Snowman Kebab"} img={SnowmanKebab} price={300} />
+          </div>
+        </div>
+        {isFinished && <LandingNextButton />}
+      </Section>
+    </LandingSection>
   );
 };
 
-const LearnScreen: React.FC = () => {
-  const [wasInViewRef, wasInView] = useWasInView();
+const buttonsRootStyle = css`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
+const buttonStyle = css`
+  margin-left: 1em;
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes enter {
+    0% {
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    25% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -100%, 0);
+      transform-style: preserve-3d;
+    }
+    0%,
+    50%,
+    88%,
+    96%,
+    100% {
+      animation-timing-function: cubic-bezier(0.12, 0.52, 0.57, 1);
+      transform: translate3d(0, 0, 0);
+      transform-style: preserve-3d;
+    }
+    75% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -33%, 0);
+      transform-style: preserve-3d;
+    }
+    94% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -11%, 0);
+      transform-style: preserve-3d;
+    }
+    97% {
+      animation-timing-function: cubic-bezier(0.4, 0, 1, 0.6);
+      transform: translate3d(0, -3%, 0);
+      transform-style: preserve-3d;
+    }
+  }
+  animation-name: enter, fadeIn;
+  animation-duration: 500ms, 1s;
+  animation-iteration-count: 1;
+`;
+
+const LearnScreen: React.FC = () => {
   return (
-    <Screen>
-      <div ref={wasInViewRef}>
-        {wasInView && (
-          <SectionFocusContext.Provider
-            value={{ activeSectionID: "", setActiveSectionID: () => {} }}
-          >
-            <Section title={"Let this frog be your guide!"}>
-              <Dialog>
-                <Frog>
-                  {"Yup."}
-                  <Pause ms={500} />
-                  {"That'll be me."}
-                  <Pause ms={500} />
-                  {"Folks call me..."}
-                  <Pause ms={500} />
-                  {"frog."}
-                </Frog>
-                <Frog>
-                  {
-                    "Yeah yeah. I know. ‟They're going to make a frog teach me about this over-engineered typewriter effect?”"
-                  }
-                </Frog>
-                <Frog>{"Now that ain't nice. "}</Frog>
-              </Dialog>
-            </Section>
-          </SectionFocusContext.Provider>
-        )}
-      </div>
-    </Screen>
+    <LandingSection>
+      <SectionFocusContext.Provider
+        value={{ activeSectionID: "", setActiveSectionID: () => {} }}
+      >
+        <Section title={"Let this frog be your guide!"}>
+          <Dialog>
+            <Frog>
+              {"Yup."}
+              <Pause ms={500} />
+              {"That'll be me."}
+              <Pause ms={500} />
+              {"Folks call me..."}
+              <Pause ms={500} />
+              {"frog."}
+            </Frog>
+            <Frog>
+              {
+                "Yeah yeah. I know. “I'm going to be taught how to use this thing by a frog?”"
+              }
+            </Frog>
+            <Frog>
+              {"Yup."}
+              <Pause ms={500} />
+              {
+                "Originally we wanted a pig to do it, but didn't have the budget."
+              }
+              <HappyExpression /> {"Yar har har!"}
+            </Frog>
+            <Frog autoProceed>
+              {"Just kidding."}
+              <Pause ms={500} />
+              {"This is open source, so we don't have a budget."}
+              <Pause ms={500} />
+            </Frog>
+            <Frog autoProceed>{"Start wherever you want."}</Frog>
+            <div className={buttonsRootStyle}>
+              <BlockLink className={buttonStyle} theme={"BLACK"} to={"/quick"}>
+                <img src={CompassIcon} />
+                {"lookup"}
+              </BlockLink>
+              <BlockLink className={buttonStyle} to={"/guides"} theme={"GREEN"}>
+                <img src={FrogIcon} />
+                {"guides"}
+              </BlockLink>
+              <BlockLink className={buttonStyle} to={"/api"}>
+                <img src={KeyboardIcon} />
+                {"api"}
+              </BlockLink>
+            </div>
+          </Dialog>
+        </Section>
+      </SectionFocusContext.Provider>
+    </LandingSection>
   );
 };
 
@@ -416,15 +488,17 @@ const SFX: React.FC = ({ children }) => {
 const gridStyles = css`
   display: grid;
   grid-template-columns: 1fr repeat(7, 96px) 1fr;
+  grid-template-rows: 20px 1fr 36px;
   column-gap: 8px;
-  background: #eeeeee;
+  min-height: 100vh;
 `;
 
 const mobileGridStyles = css`
   display: grid;
   grid-template-columns: 0fr repeat(7, 1fr) 0fr;
   column-gap: 8px;
-  background: #eeeeee;
+  min-height: 100vh;
+  grid-template-rows: 20px 1fr 36px;
 `;
 
 const subgridStyles = css`
@@ -501,11 +575,21 @@ const NavMenuLink: React.FC<NavLinkProps> = ({ children, ...props }) => (
 const internetTimeStyle = css`
   text-align: right;
   flex: 1 0 auto;
+  color: black;
+  text-decoration-thickness: 2px;
 `;
 
 const Time = () => {
   const time = useInternetTime();
-  return <div className={internetTimeStyle}>{time}</div>;
+  return (
+    <a
+      target={"_blank"}
+      href={"http://gwil.co/internet-time"}
+      className={internetTimeStyle}
+    >
+      {time}
+    </a>
+  );
 };
 
 function useScrollToTop() {
@@ -515,6 +599,20 @@ function useScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname]);
 }
+
+const Landing: React.FC = () => {
+  return (
+    <SectionFocusContext.Provider
+      value={{ activeSectionID: "", setActiveSectionID: () => {} }}
+    >
+      <Dialog>
+        <IntroScreen />
+        <AttentionScreen />
+        <LearnScreen />
+      </Dialog>
+    </SectionFocusContext.Provider>
+  );
+};
 
 const App: React.FC = () => {
   useScrollToTop();
@@ -548,9 +646,7 @@ const App: React.FC = () => {
       <div className={contentStyle}>
         <SFX>
           <Route exact path={"/"}>
-            <IntroScreen />
-            <AttentionScreen />
-            <LearnScreen />
+            <Landing />
           </Route>
           <Route exact path={"/guides"}>
             <Guides />
@@ -562,6 +658,11 @@ const App: React.FC = () => {
             <APIDocs />
           </Route>
         </SFX>
+      </div>
+      <div className={footerStyle}>
+        {"© "}
+        <a href={"http://gwil.co"}>{"Sam Gwilym"}</a>
+        {" 2020"}
       </div>
     </Grid>
   );

@@ -78,7 +78,7 @@ const nextRootStyles = css`
   }
 `;
 
-const NextButton: React.FC = () => {
+export const NextButton: React.FC = () => {
   const { setActiveSectionID } = useContext(SectionFocusContext);
   const { id } = useContext(SectionContext);
   const { isFinished: dialogIsFinished } = useContext(DialogContext);
