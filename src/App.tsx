@@ -8,9 +8,10 @@ import {
   Route,
   NavLink,
   NavLinkProps,
+  Link,
   useLocation
 } from "react-router-dom";
-import { GREY, TEXT_PINK, GREEN, PINK } from "./colours";
+import { GREY, TEXT_PINK, GREEN } from "./colours";
 import { useInView } from "react-intersection-observer";
 import useInternetTime from "use-internet-time";
 import QuickStart from "./content/QuickStart";
@@ -20,6 +21,7 @@ import KeyIcon from "./images/key-menu.svg";
 import CompassIcon from "./images/compass-menu.svg";
 import FrogIcon from "./images/frog-menu.svg";
 import KeyboardIcon from "./images/keyboard-menu.svg";
+import GitIcon from "./images/repo-menu.svg";
 import Megayaki from "./images/mega-yaki.svg";
 import SnowmanKebab from "./images/snowman-kebab.svg";
 import RufflePizza from "./images/ruffle-pizza.svg";
@@ -640,6 +642,14 @@ const App: React.FC = () => {
           <img src={KeyboardIcon} aria-hidden alt={"A tiny keyboard"} />
           {"API"}
         </NavMenuLink>
+        <a
+          className={navMenuLinkStyle}
+          href={"https://github.com/sgwilym/windups"}
+          title={"repo"}
+        >
+          <img src={GitIcon} aria-hidden alt={"A little forking icon"} />
+          {"repo"}
+        </a>
         <Time />
       </nav>
 
@@ -661,7 +671,7 @@ const App: React.FC = () => {
       </div>
       <div className={footerStyle}>
         {"© "}
-        <a href={"http://gwil.co"}>{"Sam Gwilym"}</a>
+        <a href={"https://gwil.co"}>{"Sam Gwilym"}</a>
         {" 2020"}
       </div>
     </Grid>
