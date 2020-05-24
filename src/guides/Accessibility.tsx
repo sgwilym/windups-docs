@@ -18,7 +18,7 @@ const SkipForReducedMotion = () => {
   return <div>{text}</div>;
 };`;
 
-const SCREENREADER_EXAMPLE = `import { useWindupString } from "windups;
+const SCREENREADER_EXAMPLE = `import { useWindupString } from "windups";
 import { VisuallyHidden } from "@reach/visually-hidden";
 
 const AccessibleWindupString = ({ text }) => {
@@ -33,7 +33,7 @@ const AccessibleWindupString = ({ text }) => {
 } 
 `;
 
-const SCREENREADER_CHILDREN_EXAMPLE = `import { WindupChildren, textFromChildren } from "windups;
+const SCREENREADER_CHILDREN_EXAMPLE = `import { WindupChildren, textFromChildren } from "windups";
 import { VisuallyHidden } from "@reach/visually-hidden";
 
 const AccessibleWindupChildren = ({ children }) => {
