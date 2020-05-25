@@ -19,8 +19,9 @@ const Install: React.FC = () => {
           {"So... in case three random words doesn't mean anything to you..."}
         </Frog>
         <Frog>
-          {"To use windups, you have to add it as a "}{" "}
-          <Emphasis>{"dependency"}</Emphasis> {" to your project first."}
+          {"To use windups, you have to add it as a "}
+          <Emphasis>{"dependency"}</Emphasis>
+          {" to your project first."}
         </Frog>
         <Frog>
           {
