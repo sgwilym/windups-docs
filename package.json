@@ -25,7 +25,7 @@
     "typescript": "3.7.2",
     "use-debounce": "3.4.1",
     "use-internet-time": "1.0.1",
-    "windups": "1.0.1"
+    "windups": "1.0.2"
   },
   "scripts": {
     "start": "craco start",

@@ -2932,10 +2932,10 @@ braces@^2.3.1, braces@^2.3.2:
     split-string "^3.0.2"
     to-regex "^3.0.1"
 
-break-styled-lines@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/break-styled-lines/-/break-styled-lines-1.1.1.tgz#8e14aaafaa7497bebd1a55985701cd7099f10aa2"
-  integrity sha512-DNLqyaNnzBQvs55GTUmq4V85g1KihiDMO5w9MnKBcgBgQgYd+JgQsW6EBvCr62o03tYWH6cVOXvjD2qKCSBicQ==
+break-styled-lines@1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/break-styled-lines/-/break-styled-lines-1.1.2.tgz#2c946e7257894d4950e24231540afe0d1943000a"
+  integrity sha512-yxc6mVfy6icUbFhOT82/Lf2D+/DbjOqL6INP5P1KGJJdZaef4dWlb8p7Eopkz1OCismQ2AwgND/QdeY2xp0Nbw==
 
 brorand@^1.0.1:
   version "1.1.0"
@@ -11350,12 +11350,12 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-windups@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/windups/-/windups-1.0.1.tgz#ab65e3bec8591cdca02ad948663c906dcf043861"
-  integrity sha512-dT1hf34qRwPYB/PbbfO7TKb1G2rpEvplDsYrtOI8Lcy9AIrdttyncZVXFFGNQBayyj9bzX8IWD/PUHfqhA9DKg==
+windups@1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/windups/-/windups-1.0.2.tgz#1f34e8ccbffa24ca35e1f75926d971ad6a67d552"
+  integrity sha512-tyIt2zuN5KM9tz2pd9sf6MkkEDix+8eHdTS3YTvfrqmS5YmqfRl69jghsAtG7keywGYy2PqYmd2btSQ3n0pyTw==
   dependencies:
-    break-styled-lines "^1.1.1"
+    break-styled-lines "1.1.2"
 
 word-wrap@~1.2.3:
   version "1.2.3"
