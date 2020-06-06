@@ -8,7 +8,7 @@ import { WindupChildren } from "windups";
 import Auntie from "../images/auntie.svg";
 
 const PIC_EXAMPLE = `import React from "react";
-import { WindupComponent } from "windups";
+import { WindupChildren } from "windups";
 
 const AuntieWindup = () => {
   return (
@@ -25,7 +25,7 @@ const AuntieWindup = () => {
 };`;
 
 const COMPOSED_EXAMPLE = `import React from "react";
-import { WindupComponent } from "windups";
+import { WindupChildren } from "windups";
 
 const ComponentWithInlineText = ({children}) => {
   return (
