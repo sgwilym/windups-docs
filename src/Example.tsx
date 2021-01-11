@@ -9,6 +9,7 @@ const rootStyle = css`
   border-radius: 5px;
   box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.05);
   margin-bottom: 16px;
+  background-color: white;
 `;
 
 const Example: React.FC = ({ children }) => {
@@ -22,7 +23,7 @@ const Example: React.FC = ({ children }) => {
             proceed();
           }, 500);
         },
-        ...rest
+        ...rest,
       }}
     >
       <div className={rootStyle}>{children}</div>

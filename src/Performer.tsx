@@ -24,7 +24,7 @@ const inactiveStyle = css`
 `;
 
 export const PerformerContext = React.createContext({
-  setAvatarFrames: (_frames: FrameSet) => {}
+  setAvatarFrames: (_frames: FrameSet) => {},
 });
 
 type AvatorProps = {
@@ -59,7 +59,7 @@ function avatarReducer(state: FrameSet, action: Action) {
     default:
       return {
         normal: cycleFrames(state.normal),
-        resting: cycleFrames(state.resting)
+        resting: cycleFrames(state.resting),
       };
   }
 }
@@ -81,26 +81,32 @@ export type FrameSet = {
 
 interface PerformerProps extends DialogElementProps {
   initialFrameSet: FrameSet;
+  silent?: boolean;
 }
 
 const Performer: React.FC<PerformerProps> = ({
   children,
   autoProceed,
-  initialFrameSet
+  initialFrameSet,
+  silent,
 }) => {
   const { isActive: sectionIsActive } = useContext(SectionContext);
   const { isActive } = useContext(DialogChildContext);
   const [frameSet, dispatch] = useReducer(avatarReducer, initialFrameSet);
   const text = textFromChildren(children);
   const [isResting, setIsResting] = useState(false);
-  const frames = isResting ? frameSet.resting : frameSet.normal;
+  const frames = silent
+    ? frameSet.resting
+    : isResting
+    ? frameSet.resting
+    : frameSet.normal;
 
   return (
     <PerformerContext.Provider
       value={{
-        setAvatarFrames: newFrameSet => {
+        setAvatarFrames: (newFrameSet) => {
           dispatch({ type: "newFrameSet", frameSet: newFrameSet });
-        }
+        },
       }}
     >
       <div

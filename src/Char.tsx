@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { css, cx } from "linaria";
 import { CharWrapper } from "windups";
-import { TEXT_PINK } from "./colours";
+import { TEXT_PINK, GREY } from "./colours";
 
 export const CharContext = React.createContext({ animated: false });
 
@@ -83,6 +83,20 @@ const emphasisStyle = css`
   color: ${TEXT_PINK};
 `;
 
+const thinkingStyle = css`
+  @keyframes fade {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.7;
+    }
+  }
+  animation-name: fade;
+  animation-duration: 500ms;
+  opacity: 0.7;
+`;
+
 const EmphasisChar: React.FC = ({ children }) => {
   return (
     <span className={cx(charStyle, dropStyle, emphasisStyle)}>{children}</span>
@@ -91,6 +105,14 @@ const EmphasisChar: React.FC = ({ children }) => {
 
 export const Emphasis: React.FC = ({ children }) => {
   return <CharWrapper element={EmphasisChar}>{children}</CharWrapper>;
+};
+
+const ThinkingChar: React.FC = ({ children }) => {
+  return <span className={cx(charStyle, thinkingStyle)}>{children}</span>;
+};
+
+export const Thinking: React.FC = ({ children }) => {
+  return <CharWrapper element={ThinkingChar}>{children}</CharWrapper>;
 };
 
 const DropChar: React.FC = ({ children }) => {

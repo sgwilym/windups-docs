@@ -85,12 +85,13 @@ const frogFrameSets: FrogFrameMap = {
   MAD: { normal: madFrames, resting: madRestingFrames },
   SMUG: { normal: smugFrames, resting: smugRestingFrames },
   SHAME: { normal: shameFrames, resting: shameRestingFrames },
-  SHOCK: { normal: shockFrames, resting: shockFrames },
-  COOL: { normal: coolFrames, resting: coolRestingFrames }
+  SHOCK: { normal: shockFrames, resting: shockRestingFrames },
+  COOL: { normal: coolFrames, resting: coolRestingFrames },
 };
 
 interface FrogProps extends DialogElementProps {
   expression?: FrogEmotion;
+  silent?: boolean;
 }
 
 const FrogContext = createContext<{
@@ -98,13 +99,14 @@ const FrogContext = createContext<{
   currentExpression: FrogEmotion;
 }>({
   setExpression: () => {},
-  currentExpression: "NORMAL"
+  currentExpression: "NORMAL",
 });
 
 const Frog: React.FC<FrogProps> = ({
   children,
   autoProceed,
-  expression: initialExpression = "NORMAL"
+  expression: initialExpression = "NORMAL",
+  silent,
 }) => {
   const [currentExpression, setCurrentExpression] = useState(initialExpression);
 
@@ -115,6 +117,7 @@ const Frog: React.FC<FrogProps> = ({
       <Performer
         initialFrameSet={frogFrameSets[initialExpression]}
         autoProceed={autoProceed}
+        silent={silent}
       >
         <SetExpression expression={initialExpression} />
         {children}

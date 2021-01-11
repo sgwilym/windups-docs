@@ -13,7 +13,7 @@ const BadlyBreakingLine = () => {
   const { proceed } = useContext(DialogChildContext);
   const [text] = useWindupString("Is line-breaking necessary?", {
     pace: () => 200,
-    onFinished: proceed
+    onFinished: proceed,
   });
 
   return <div style={{ fontSize: "72px" }}>{text}</div>;
