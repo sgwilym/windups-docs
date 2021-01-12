@@ -98,8 +98,12 @@ const thinkingStyle = css`
 `;
 
 const EmphasisChar: React.FC = ({ children }) => {
+  const { animated } = useContext(CharContext);
+
   return (
-    <span className={cx(charStyle, dropStyle, emphasisStyle)}>{children}</span>
+    <span className={cx(charStyle, animated && dropStyle, emphasisStyle)}>
+      {children}
+    </span>
   );
 };
 
@@ -116,7 +120,11 @@ export const Thinking: React.FC = ({ children }) => {
 };
 
 const DropChar: React.FC = ({ children }) => {
-  return <span className={cx(charStyle, dropStyle)}>{children}</span>;
+  const { animated } = useContext(CharContext);
+
+  return (
+    <span className={cx(charStyle, animated && dropStyle)}>{children}</span>
+  );
 };
 
 export const Dropped: React.FC = ({ children }) => {

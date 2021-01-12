@@ -8,8 +8,7 @@ import {
   Route,
   NavLink,
   NavLinkProps,
-  Link,
-  useLocation
+  useLocation,
 } from "react-router-dom";
 import { GREY, TEXT_PINK, GREEN } from "./colours";
 import { useInView } from "react-intersection-observer";
@@ -28,7 +27,7 @@ import RufflePizza from "./images/ruffle-pizza.svg";
 import { useWindupString, CharWrapper, Pause } from "windups";
 import Cutlery from "./images/forks.svg";
 import useComponentSize from "@rehooks/component-size";
-import Frog, { HappyExpression } from "./performers/Frog";
+import Frog, { HappyExpression, usePreloadFrogFrames } from "./performers/Frog";
 import Dialog from "./Dialog";
 import SectionFocusContext from "./SectionFocusContext";
 import BlockLink from "./BlockLink";
@@ -206,13 +205,13 @@ const MenuItem: React.FC<{
     wasInView && discountedPrice ? `ƒ${discountedPrice}!` : "",
     {
       pace: () => 450,
-      onFinished
+      onFinished,
     }
   );
 
   return (
     <div className={itemRootStyle}>
-      <img src={img} />
+      <img src={img} alt={"A fantasy menu item"} />
       <div ref={wasInViewRef} className={nameStyle}>
         {name}
       </div>
@@ -274,7 +273,7 @@ const menuStyle = css`
 function useWasInView(): [() => void, boolean] {
   const [wasInView, setWasInView] = React.useState(false);
   const [inViewRef, isInView] = useInView({
-    rootMargin: "-100px 0px"
+    rootMargin: "-100px 0px",
   });
 
   React.useEffect(() => {
@@ -463,7 +462,7 @@ const smashStyles = css`
 `;
 
 export const SFXContext = React.createContext({
-  smash: () => {}
+  smash: () => {},
 });
 
 const SFX: React.FC = ({ children }) => {
@@ -623,6 +622,7 @@ const Landing: React.FC = () => {
 
 const App: React.FC = () => {
   useScrollToTop();
+  usePreloadFrogFrames();
 
   return (
     <Grid>

@@ -3,7 +3,7 @@ import React, {
   useCallback,
   useRef,
   useEffect,
-  useContext
+  useContext,
 } from "react";
 import { useInView } from "react-intersection-observer";
 import useSize from "@rehooks/component-size";
@@ -19,12 +19,12 @@ if (!("ResizeObserver" in window)) {
 }
 
 export const DialogContext = React.createContext({
-  isFinished: false
+  isFinished: false,
 });
 
 export const DialogChildContext = React.createContext({
   isActive: true,
-  proceed: () => {}
+  proceed: () => {},
 });
 
 function useKeepInViewer(height: number) {
@@ -33,11 +33,11 @@ function useKeepInViewer(height: number) {
   const { isActive } = useContext(SectionContext);
 
   const [inViewRef, isInView] = useInView({
-    rootMargin: "-100px 0px"
+    rootMargin: "-100px 0px",
   });
 
   const setRef = useCallback(
-    node => {
+    (node) => {
       measurementRef.current = node;
       inViewRef(node);
     },
@@ -65,7 +65,7 @@ function useKeepInViewer(height: number) {
     ) {
       window.scroll({
         top: measurementRef.current.offsetTop - (window.innerHeight / 3) * 2,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
 
@@ -75,15 +75,33 @@ function useKeepInViewer(height: number) {
   return <div ref={setRef} />;
 }
 
-const Dialog: React.FC = ({ children }) => {
+const Dialog: React.FC<{ skipped?: boolean }> = ({
+  children,
+  skipped = false,
+}) => {
   const [numberOfChildrenToShow, setNumberOfChildrenToShow] = useState(1);
   const activeChildIndex = numberOfChildrenToShow - 1;
   const rootRef = useRef(null);
   const { height } = useSize(rootRef);
   const { activeSectionID } = useContext(SectionFocusContext);
-  const { id } = useContext(SectionContext);
+  const { id, hasSkipped } = useContext(SectionContext);
   const isDialogActive = activeSectionID === id;
   const keepy = useKeepInViewer(height);
+  const finish = useCallback(() => {
+    setNumberOfChildrenToShow(React.Children.count(children));
+  }, [children]);
+
+  useEffect(() => {
+    if (skipped) {
+      finish();
+    }
+  }, [skipped, finish]);
+
+  useEffect(() => {
+    if (hasSkipped) {
+      finish();
+    }
+  }, [hasSkipped, finish]);
 
   const shownChildren = React.Children.toArray(children)
     .slice(0, numberOfChildrenToShow)
@@ -96,7 +114,7 @@ const Dialog: React.FC = ({ children }) => {
             if (i + 2 > numberOfChildrenToShow && isDialogActive) {
               setNumberOfChildrenToShow(i + 2);
             }
-          }
+          },
         }}
       >
         {child}
@@ -106,7 +124,7 @@ const Dialog: React.FC = ({ children }) => {
   return (
     <DialogContext.Provider
       value={{
-        isFinished: numberOfChildrenToShow >= React.Children.count(children)
+        isFinished: numberOfChildrenToShow >= React.Children.count(children),
       }}
     >
       <div ref={rootRef}>

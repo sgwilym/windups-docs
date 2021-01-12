@@ -126,4 +126,28 @@ const Frog: React.FC<FrogProps> = ({
   );
 };
 
+export const usePreloadFrogFrames = () => {
+  const frames = [
+    ...normFrames,
+    ...normRestingFrames,
+    ...laffFrames,
+    ...laffRestingFrames,
+    ...madFrames,
+    ...madRestingFrames,
+    ...smugFrames,
+    ...smugRestingFrames,
+    ...shameFrames,
+    ...shameRestingFrames,
+    ...shockFrames,
+    ...shockRestingFrames,
+    ...coolFrames,
+    ...coolRestingFrames,
+  ];
+
+  frames.forEach((source) => {
+    const image = new Image();
+    image.src = source;
+  });
+};
+
 export default Frog;

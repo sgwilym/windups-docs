@@ -49,6 +49,7 @@ const CodeExample: React.FC<CodeExampleProps> = ({ children }) => {
       }
       return randomInt(80);
     },
+    skipped: dialogIsFinished,
   });
 
   useKey([13, 39], () => {
