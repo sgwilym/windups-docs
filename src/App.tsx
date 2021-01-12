@@ -501,10 +501,6 @@ const mobileGridStyles = css`
   column-gap: 8px;
   min-height: 100vh;
   grid-template-rows: 20px 1fr 36px;
-
-  nav {
-    height: 40px;
-  }
 `;
 
 const subgridStyles = css`
