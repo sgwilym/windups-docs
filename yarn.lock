@@ -11350,10 +11350,10 @@ wide-align@^1.1.0:
   dependencies:
     string-width "^1.0.2 || 2"
 
-windups@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/windups/-/windups-1.1.4.tgz#ed69d90ca645949a80bf9b4b44dd13a7767081c7"
-  integrity sha512-O43SiQpiEcuLQr9PuOS1WLbCUix3rExP9Lod/++m9RtXY8bBQ2mRRfKp0Xb7KZr1vJSyjPS+VNxS5rH3XhDS6g==
+windups@^1.1.7:
+  version "1.1.7"
+  resolved "https://registry.yarnpkg.com/windups/-/windups-1.1.7.tgz#42dc8c60a04f6ffb75fd176f46b7ed50997b4342"
+  integrity sha512-bJRmC0FDCNDFBjXR2RsXmzHCDn9rnsEiNayGBm7QWLPqKR6UC1op7j+zop64R/EsA9R7Srb2spnF1M0xwh8m7A==
   dependencies:
     break-styled-lines "^1.2.1"
 

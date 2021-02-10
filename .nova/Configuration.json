@@ -1,5 +1,8 @@
 {
   "index.use_scm_ignored_files" : true,
+  "workspace.art_style" : 1,
+  "workspace.color" : 9,
+  "workspace.name" : "Windups Docs",
   "workspace.preview_append_paths" : false,
   "workspace.preview_type" : "custom",
   "workspace.preview_url" : "http:\/\/localhost:3000"
